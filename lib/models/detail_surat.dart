@@ -1,4 +1,4 @@
-class Detail {
+class DetailSurat {
   int? nomor;
   String? nama;
   String? namaLatin;
@@ -12,7 +12,7 @@ class Detail {
   SuratSelanjutnya? suratSelanjutnya;
   bool? suratSebelumnya;
 
-  Detail(
+  DetailSurat(
       {this.nomor,
       this.nama,
       this.namaLatin,
@@ -26,7 +26,7 @@ class Detail {
       this.suratSelanjutnya,
       this.suratSebelumnya});
 
-  Detail.fromJson(Map<String, dynamic> json) {
+  DetailSurat.fromJson(Map<String, dynamic> json) {
     nomor = json['nomor'];
     nama = json['nama'];
     namaLatin = json['nama_latin'];

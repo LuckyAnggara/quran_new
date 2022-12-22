@@ -12,7 +12,7 @@ class MenuWidget extends StatelessWidget {
       subTitle: 'Baca dan Dengarkan',
     ),
     SeassionCard(
-      route: '',
+      route: '/jadwal',
       image: 'assets/icons/pray.png',
       title: 'Jadwal Shalat',
       subTitle: 'Jadwal shalat lengkap',

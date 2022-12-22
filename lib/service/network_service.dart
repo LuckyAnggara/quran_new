@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:reverpod/constant.dart';
+import 'package:reverpod/models/detail_surat.dart';
 import 'package:reverpod/models/jadwal_sholat.dart';
 import 'package:reverpod/models/surat.dart';
 
@@ -12,11 +14,20 @@ class NetworkService {
   Future<List<Surat>> getSurat() async {
     var url = Uri.parse('${ApiConstants.quranUrl}/surat');
     var res = await http.get(url);
-
     if (res.statusCode == 200) {
       final List result = jsonDecode(res.body);
-
       return result.map(((e) => Surat.fromJson(e))).toList();
+    } else {
+      throw Exception(res.reasonPhrase);
+    }
+  }
+
+  Future<DetailSurat> getDetailSurat(String nomor) async {
+    var url = Uri.parse('${ApiConstants.quranUrl}/surat/${nomor}');
+    var res = await http.get(url);
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      return DetailSurat.fromJson(data);
     } else {
       throw Exception(res.reasonPhrase);
     }

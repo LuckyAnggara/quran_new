@@ -5,13 +5,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constant.dart';
+import '../controller/SuratController.dart';
 import '../models/surat.dart';
 import '../service/network_service.dart';
 import 'Widget/AppBar.dart';
-
-final suratProvider = FutureProvider<List<Surat>>((ref) async {
-  return ref.read(apiQuranProvider).getSurat();
-});
 
 class SuratPage extends ConsumerWidget {
   const SuratPage({Key? key}) : super(key: key);
@@ -113,9 +110,9 @@ class SuratPage extends ConsumerWidget {
                               itemBuilder: (context, index) {
                                 Surat surat = _data[index];
                                 if (index == 2) {
-                                  return listSurat(surat, true);
+                                  return listSurat(surat, true, context);
                                 }
-                                return listSurat(surat, false);
+                                return listSurat(surat, false, context);
                               },
                             );
                           },
@@ -136,9 +133,19 @@ class SuratPage extends ConsumerWidget {
     );
   }
 
-  GestureDetector listSurat(Surat surat, bool isBookmark) {
+  GestureDetector listSurat(
+      Surat surat, bool isBookmark, BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context.goNamed('baca', params: {'nomor': surat.nomor.toString()});
+
+        //     params: {
+        //   'number': surat.nomor.toString(),
+        //   'name': surat.namaLatin!,
+        //   'translation': surat.arti!,
+        //   'revelation': surat.tempatTurun!,
+        //   'ayat': surat.jumlahAyat.toString()
+        // });
         // Get.toNamed(
         //   '/read-quran/${surat.nomor}',
         //   arguments: {
@@ -160,7 +167,7 @@ class SuratPage extends ConsumerWidget {
                 children: [
                   Text(
                     surat.nomor.toString(),
-                    style: kPrimaryFontStyle.copyWith(fontSize: 16),
+                    style: kPrimaryFontStyle.copyWith(fontSize: 14),
                   ),
                   const SizedBox(
                     width: 15,
@@ -225,22 +232,22 @@ class SuratPage extends ConsumerWidget {
       ),
     );
   }
-  //
-  // Container lastReadContainer() {
-  //   return Container(
-  //     margin: EdgeInsets.only(right: 15),
-  //     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white,
-  //       border: Border.all(color: kSecondaryColor),
-  //       borderRadius: BorderRadius.all(
-  //         Radius.circular(5),
-  //       ),
-  //     ),
-  //     child: Text(
-  //       'Al-Fatihah',
-  //       style: kSecondaryGreyFontStyle.copyWith(fontSize: 12),
-  //     ),
-  //   );
-  // }
+//
+// Container lastReadContainer() {
+//   return Container(
+//     margin: EdgeInsets.only(right: 15),
+//     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+//     decoration: BoxDecoration(
+//       color: Colors.white,
+//       border: Border.all(color: kSecondaryColor),
+//       borderRadius: BorderRadius.all(
+//         Radius.circular(5),
+//       ),
+//     ),
+//     child: Text(
+//       'Al-Fatihah',
+//       style: kSecondaryGreyFontStyle.copyWith(fontSize: 12),
+//     ),
+//   );
+// }
 }
