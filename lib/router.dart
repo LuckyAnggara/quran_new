@@ -1,5 +1,5 @@
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reverpod/view/JadwalSolat.dart';
 import 'package:reverpod/view/MainPage.dart';
 import 'package:reverpod/view/ReadSuratPage.dart';
@@ -19,11 +19,9 @@ final GoRouter router = GoRouter(
             return CustomTransitionPage(
               key: state.pageKey,
               child: SuratPage(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOutCirc)
-                      .animate(animation),
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
                   child: child,
                 );
               },
@@ -36,11 +34,9 @@ final GoRouter router = GoRouter(
             return CustomTransitionPage(
               key: state.pageKey,
               child: JadwalSolat(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOutCirc)
-                      .animate(animation),
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
                   child: child,
                 );
               },
@@ -49,19 +45,17 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           name: 'baca',
-          path: 'baca-surat/:nomor',
+          path: 'baca-surat/:nomor/:namaLatin',
           pageBuilder: (context, state) {
-            print(state.params);
             return CustomTransitionPage(
               key: state.pageKey,
               child: ReadSuratPage(
                 nomor: state.params['nomor'],
+                namaLatin: state.params['namaLatin'],
               ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOutCirc)
-                      .animate(animation),
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
                   child: child,
                 );
               },

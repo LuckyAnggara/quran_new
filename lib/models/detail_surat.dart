@@ -9,22 +9,23 @@ class DetailSurat {
   String? audio;
   bool? status;
   List<Ayat>? ayat;
-  SuratSelanjutnya? suratSelanjutnya;
-  bool? suratSebelumnya;
+  // SuratSelanjutnya? suratSelanjutnya;
+  // bool? suratSebelumnya;
 
-  DetailSurat(
-      {this.nomor,
-      this.nama,
-      this.namaLatin,
-      this.jumlahAyat,
-      this.tempatTurun,
-      this.arti,
-      this.deskripsi,
-      this.audio,
-      this.status,
-      this.ayat,
-      this.suratSelanjutnya,
-      this.suratSebelumnya});
+  DetailSurat({
+    this.nomor,
+    this.nama,
+    this.namaLatin,
+    this.jumlahAyat,
+    this.tempatTurun,
+    this.arti,
+    this.deskripsi,
+    this.audio,
+    this.status,
+    this.ayat,
+    // this.suratSelanjutnya,
+    // this.suratSebelumnya
+  });
 
   DetailSurat.fromJson(Map<String, dynamic> json) {
     nomor = json['nomor'];
@@ -42,10 +43,10 @@ class DetailSurat {
         ayat!.add(new Ayat.fromJson(v));
       });
     }
-    suratSelanjutnya = json['surat_selanjutnya'] != null
-        ? new SuratSelanjutnya.fromJson(json['surat_selanjutnya'])
-        : null;
-    suratSebelumnya = json['surat_sebelumnya'];
+    // suratSelanjutnya = json['surat_selanjutnya'] != null
+    //     ? new SuratSelanjutnya.fromJson(json['surat_selanjutnya'])
+    //     : null;
+    // suratSebelumnya = json['surat_sebelumnya'];
   }
 
   Map<String, dynamic> toJson() {
@@ -62,10 +63,10 @@ class DetailSurat {
     if (this.ayat != null) {
       data['ayat'] = this.ayat!.map((v) => v.toJson()).toList();
     }
-    if (this.suratSelanjutnya != null) {
-      data['surat_selanjutnya'] = this.suratSelanjutnya!.toJson();
-    }
-    data['surat_sebelumnya'] = this.suratSebelumnya;
+    // if (this.suratSelanjutnya != null) {
+    //   data['surat_selanjutnya'] = this.suratSelanjutnya!.toJson();
+    // }
+    // data['surat_sebelumnya'] = this.suratSebelumnya;
     return data;
   }
 }

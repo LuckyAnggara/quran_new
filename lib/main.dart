@@ -1,12 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reverpod/models/surat.dart';
 import 'package:reverpod/router.dart';
-import 'package:reverpod/service/network_service.dart';
-import 'package:reverpod/view/MainPage.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  await runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      runApp(
+        const ProviderScope(
+          child: MyApp(),
+        ),
+      );
+    },
+    (Object error, StackTrace stack) {
+      debugPrint(error.toString());
+      debugPrint(stack.toString());
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {

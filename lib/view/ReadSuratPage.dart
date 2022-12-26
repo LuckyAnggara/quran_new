@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:reverpod/controller/AudioController.dart';
 import 'package:reverpod/controller/SuratController.dart';
-
+import 'package:reverpod/router.dart';
 import 'package:reverpod/view/Widget/AppBar.dart';
 
 import '../constant.dart';
 import '../models/detail_surat.dart';
 
 class ReadSuratPage extends ConsumerWidget {
-  ReadSuratPage({Key? key, required this.nomor}) : super(key: key);
+  ReadSuratPage({Key? key, required this.nomor, required this.namaLatin}) : super(key: key);
 
   final String? nomor;
+  final String? namaLatin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _data = ref.watch(bacaProvider(nomor!));
-    print(_data.value);
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -33,82 +33,83 @@ class ReadSuratPage extends ConsumerWidget {
           child: Column(
             children: [
               AppBarWidget(
-                onPress: () {},
+                onPress: () {
+                  ref.invalidate(bacaProvider);
+                  router.go('/surat');
+                },
                 leftIcon: const Icon(Icons.arrow_back_ios),
-                title: nomor.toString(),
-                rightIcon: const [
-                  Icon(Icons.bookmark_outline),
-                  Icon(Icons.settings_outlined),
-                ],
-                // rightIcon: [],
+                title: namaLatin.toString(),
+                rightIcon: [
+                  RightIconButton(
+                    onPress: () {
+                      ref.read(audioPlayerProvider(_data.value!.audio!));
+                    },
+                    icon: Icon(
+                      Icons.play_circle_outline,
+                      color: kSecondaryColor,
+                    ),
+                  ),
+                  RightIconButton(
+                    onPress: () {},
+                    icon: Icon(
+                      Icons.play_circle_outline,
+                      color: kSecondaryColor,
+                    ),
+                  )
+                ], // rightIcon: [],
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      // const CardDetailSurah(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      _data.when(
-                        data: (_data) {
-                          return ListView.separated(
-                            separatorBuilder: (context, int) {
-                              return const Divider();
-                            },
+                child: _data.when(
+                  data: (items) {
+                    return items.ayat!.isEmpty
+                        ? SliverToBoxAdapter(
+                            child: Column(
+                              children: const [],
+                            ),
+                          )
+                        : CustomScrollView(
+                            shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: _data.ayat!.length,
-                            itemBuilder: (context, index) {
-                              return AyahWidget(
-                                onPlay: () {},
-                                ayat: _data.ayat![index],
-                              );
-                            },
+                            slivers: [
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate((context, index) {
+                                  Ayat ayat = items.ayat![index];
+                                  return AyahWidget(ayat: ayat);
+                                }, childCount: items.ayat!.length),
+                              )
+                            ],
                           );
-                        },
-                        error: (err, s) => Text(err.toString()),
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
+                    // return SingleChildScrollView(
+                    //   physics: const BouncingScrollPhysics(),
+                    //   scrollDirection: Axis.vertical,
+                    //   child: Column(
+                    //     children: List.generate(_data.ayat!.length, (index) {
+                    //       Ayat ayat = _data.ayat![index];
+                    //       return AyahWidget(ayat: ayat, onPlay: () {});
+                    //     }),
+                    //   ),
+                    // );
+                  },
+                  error: (err, stk) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: Column(
+                          children: const [
+                            Icon(Icons.info),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "Ada masalah",
+                              style: TextStyle(color: Colors.black),
+                            )
+                          ],
                         ),
                       ),
-                      // GetBuilder(
-                      //     init: readQuranController,
-                      //     id: 'updateListAyat',
-                      //     builder: (context) {
-                      //       if (readQuranController.isLoading.value) {
-                      //         return Center(
-                      //           child: SpinKitWave(
-                      //             color: kSecondaryColor,
-                      //           ),
-                      //         );
-                      //       } else {
-                      //         var data = readQuranController.surat.value;
-                      //         var dataAudio =
-                      //             readQuranController.audio.value?.data?[0];
-                      //         // var dataTranslate =
-                      //         //     readQuranController.surat.value!.data![2];
-                      //
-                      //         return Column(
-                      //           children: List.generate(
-                      //               readQuranController.pageSize.value,
-                      //               (index) {
-                      //             return AyahWidget(
-                      //               onPlay: () {
-                      //                 readQuranController.playAudio(
-                      //                   dataAudio!.ayahs![index].audio!,
-                      //                   dataAudio.ayahs![index].numberInSurah!,
-                      //                 );
-                      //               },
-                      //               ayat: data!.ayat[index],
-                      //             );
-                      //           }).toList(),
-                      //         );
-                      //       }
-                      //     })
-                    ],
+                    );
+                  },
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
                   ),
                 ),
               )
@@ -122,86 +123,70 @@ class ReadSuratPage extends ConsumerWidget {
 
 class AyahWidget extends StatelessWidget {
   final Ayat ayat;
-  // final Ayah? ayahTranslate;
-  final VoidCallback onPlay;
 
   AyahWidget({
     required this.ayat,
-    // this.ayahTranslate,
-    required this.onPlay,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: readQuranController.playIndex.toString() != ayat.nomor.toString()
-            ? Colors.transparent
-            : kSecondaryColorMoreBlack.withOpacity(0.15),
+        color: kSecondaryColorMoreBlack.withOpacity(0.15),
         borderRadius: const BorderRadius.all(
           Radius.circular(12),
         ),
       ),
-      margin: EdgeInsets.only(bottom: 15),
+      margin: const EdgeInsets.only(bottom: 15),
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: Column(
               children: [
                 //ARAB
-                settingController.arabic
-                    ? Container(
-                        margin: EdgeInsets.only(bottom: 15),
-                        width: double.infinity,
-                        child: Text(
-                          ayat.ar,
-                          textAlign: TextAlign.end,
-                          style: kArabicFontAmiri.copyWith(
-                              fontSize: settingController.fontSizeArabic,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      )
-                    : SizedBox(),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 15),
+                  width: double.infinity,
+                  child: Text(
+                    ayat.ar.toString(),
+                    textAlign: TextAlign.end,
+                    style: kArabicFontAmiri.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                ),
                 //Latin
-                settingController.latin
-                    ? Container(
-                        margin: EdgeInsets.only(bottom: 15),
-                        width: double.infinity,
-                        child: Html(
-                          data: """${ayat.tr}""",
-                          style: {
-                            "body": Style(
-                              fontSize:
-                                  FontSize(settingController.fontSizeLatin),
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          },
-                        ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 15),
+                  width: double.infinity,
+                  child: Html(
+                    data: """${ayat.tr}""",
+                    style: {
+                      "body": Style(
+                        fontSize: FontSize(14),
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    },
+                  ),
 
-                        // Text(
-                        //   ayat.tr,
-                        //   textAlign: TextAlign.end,
-                        //   style: kArabicFontAmiri.copyWith(
-                        //       fontSize: 16,
-                        //       fontWeight: FontWeight.w500,
-                        //       color: Colors.black),
-                        // ),
-                      )
-                    : SizedBox(),
+                  // Text(
+                  //   ayat.tr,
+                  //   textAlign: TextAlign.end,
+                  //   style: kArabicFontAmiri.copyWith(
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.w500,
+                  //       color: Colors.black),
+                  // ),
+                ),
                 //Translate
-                settingController.terjemahan
-                    ? Container(
-                        width: double.infinity,
-                        child: Text(
-                          ayat.idn,
-                          textAlign: TextAlign.start,
-                          style: kPrimaryFontStyle.copyWith(
-                              fontSize: settingController.fontSizeTerjemahan,
-                              fontWeight: FontWeight.w500),
-                        ))
-                    : SizedBox(),
+                Container(
+                  width: double.infinity,
+                  child: Text(
+                    ayat.idn.toString(),
+                    textAlign: TextAlign.start,
+                    style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                )
               ],
             ),
           ),
@@ -236,6 +221,7 @@ class AyahWidget extends StatelessWidget {
                   ),
                 ),
                 Spacer(),
+
                 // GetBuilder(
                 //     init: readQuranController,
                 //     id: 'updatePlay',
@@ -284,185 +270,26 @@ class AyahWidget extends StatelessWidget {
     );
   }
 }
-//
-// class CardDetailSurah extends StatelessWidget {
-//   const CardDetailSurah({
-//     Key? key,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: EdgeInsets.symmetric(horizontal: 60, vertical: 24),
-//       width: double.infinity,
-//       decoration: BoxDecoration(
-//         gradient: LinearGradient(
-//           begin: Alignment.bottomLeft,
-//           end: Alignment.topRight,
-//           colors: [kSecondaryColor.withOpacity(0.8), kSecondaryColor],
-//         ),
-//         borderRadius: BorderRadius.all(
-//           Radius.circular(12),
-//         ),
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Text(
-//             Get.arguments['name'],
-//             style: kPrimaryWhiteFontStyle.copyWith(
-//                 fontSize: 22, fontWeight: FontWeight.w500, letterSpacing: 1.2),
-//           ),
-//           SizedBox(
-//             height: 5,
-//           ),
-//           Text(
-//             Get.arguments['translation'],
-//             style: kPrimaryWhiteFontStyle.copyWith(
-//                 fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
-//           ),
-//           SizedBox(
-//             height: 10,
-//           ),
-//           Row(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Text(
-//                 Get.arguments['revelation'],
-//                 style: kPrimaryWhiteFontStyle.copyWith(
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.normal,
-//                     letterSpacing: 1),
-//               ),
-//               Text(
-//                 ' - ',
-//                 style: kPrimaryWhiteFontStyle.copyWith(
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.normal,
-//                     letterSpacing: 1),
-//               ),
-//               Text(
-//                 '${Get.arguments['ayat']} Ayat',
-//                 style: kPrimaryWhiteFontStyle.copyWith(
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.normal,
-//                     letterSpacing: 1),
-//               ),
-//             ],
-//           ),
-//           SizedBox(
-//             height: 5,
-//           ),
-//           Divider(
-//             thickness: 1.0,
-//             color: Colors.white54,
-//           ),
-//           SizedBox(
-//             height: 20,
-//           ),
-//           Image.asset(
-//             'assets/card/bismilah.png',
-//             color: Colors.white70,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
-// child: GetBuilder<QuranController>(
-//     init: quranController,
-//     builder: (context) {
-//       SuratModelSatuan? surat = quranController.surat.value;
-//       return Column(
-//         children: [
-//           AppBarWidget(
-//             onPress: () {
-//               Get.back();
-//             },
-//             leftIcon: Icon(Icons.arrow_back_ios),
-//             title: 'aa',
-//             rightIcon: [
-//               Icon(Icons.bookmark_outline),
-//               Icon(Icons.settings_outlined),
-//             ],
-//           ),
-//           Expanded(
-//             child: SingleChildScrollView(
-//               child: quranController.isLoadingSatuan.value
-//                   ? SpinKitWave(
-//                       color: kSecondaryColor,
-//                     )
-//                   : Column(
-//                       children: [
-//                         Container(
-//                           width: double.infinity,
-//                           padding: const EdgeInsets.symmetric(vertical: 10),
-//                           child: Center(
-//                             child: Column(
-//                               children: [
-//                                 Text(
-//                                   surat!.name!.short!,
-//                                   style: kArabicFontAmiri.copyWith(
-//                                       fontSize: 30, fontWeight: FontWeight.bold),
-//                                 ),
-//                                 Text(
-//                                   surat.name!.transliteration!.id!,
-//                                   style: kPrimaryFontStyle.copyWith(fontSize: 16),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ),
-//                         Container(
-//                           margin: EdgeInsets.symmetric(vertical: 10),
-//                           width: double.infinity,
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Text(
-//                                 surat.revelation!.id!,
-//                                 style: kSecondaryGreyFontStyle.copyWith(fontSize: 12),
-//                               ),
-//                               Spacer(),
-//                               Text(
-//                                 'berjumlah ${surat.numberOfVerses!} ayat',
-//                                 style: kSecondaryGreyFontStyle.copyWith(fontSize: 12),
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           height: 10,
-//                         ),
-//                         Container(
-//                           padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-//                           decoration: BoxDecoration(
-//                             color: Colors.white,
-//                             borderRadius: BorderRadius.all(
-//                               Radius.circular(15),
-//                             ),
-//                           ),
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.end,
-//                             children: surat.verses!.map((e) {
-//                               return Container(
-//                                 width: double.infinity,
-//                                 child: Text(
-//                                   textAlign: TextAlign.right,
-//                                   e.text!.arab!,
-//                                   style: kArabicFontAmiri.copyWith(
-//                                       fontSize: 40, fontWeight: FontWeight.w500),
-//                                 ),
-//                               );
-//                             }).toList(),
-//                           ),
-//                         )
-//                       ],
-//                     ),
-//             ),
-//           )
-//         ],
-//       );
-//     })),
+// Expanded(
+// child: _data.when(
+// data: (_data) {
+// return SingleChildScrollView(
+// physics: const BouncingScrollPhysics(),
+// scrollDirection: Axis.vertical,
+// child: Column(
+// children: List.generate(_data.ayat!.length, (index) {
+// Ayat ayat = _data.ayat![index];
+// return AyahWidget(ayat: ayat, onPlay: () {});
+// }),
+// ),
+// );
+// },
+// error: (err, s) {
+// return Text(err.toString());
+// },
+// loading: () => const Center(
+// child: CircularProgressIndicator(),
+// ),
+// ),
+// )

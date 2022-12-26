@@ -5,7 +5,7 @@ import '../../constant.dart';
 class AppBarWidget extends StatelessWidget {
   final VoidCallback onPress;
   final Icon leftIcon;
-  final List<Icon>? rightIcon;
+  final List<RightIconButton>? rightIcon;
   final String title;
 
   const AppBarWidget(
@@ -50,13 +50,30 @@ class AppBarWidget extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: rightIcon!.map((e) {
-                  return Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: e,
-                  );
+                  return RightIconButton(icon: e.icon, onPress: e.onPress);
                 }).toList()),
           )
         ],
+      ),
+    );
+  }
+}
+
+class RightIconButton extends StatelessWidget {
+  final Icon icon;
+  final VoidCallback onPress;
+
+  const RightIconButton({super.key, required this.icon, required this.onPress});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      child: SizedBox(
+        child: GestureDetector(
+          onTap: onPress,
+          child: icon,
+        ),
       ),
     );
   }

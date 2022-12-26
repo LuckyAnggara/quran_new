@@ -1,13 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constant.dart';
 import '../controller/SuratController.dart';
 import '../models/surat.dart';
-import '../service/network_service.dart';
 import 'Widget/AppBar.dart';
 
 class SuratPage extends ConsumerWidget {
@@ -42,8 +40,7 @@ class SuratPage extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
@@ -55,8 +52,7 @@ class SuratPage extends ConsumerWidget {
                   children: [
                     Text(
                       'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(
-                          fontSize: 14, fontWeight: FontWeight.w500),
+                      style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -76,8 +72,7 @@ class SuratPage extends ConsumerWidget {
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
@@ -90,9 +85,7 @@ class SuratPage extends ConsumerWidget {
                       Text(
                         'Surat',
                         style: kPrimaryFontStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5),
+                            fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
                       ),
                       const SizedBox(
                         height: 15,
@@ -133,11 +126,11 @@ class SuratPage extends ConsumerWidget {
     );
   }
 
-  GestureDetector listSurat(
-      Surat surat, bool isBookmark, BuildContext context) {
+  GestureDetector listSurat(Surat surat, bool isBookmark, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed('baca', params: {'nomor': surat.nomor.toString()});
+        context.goNamed('baca',
+            params: {'nomor': surat.nomor.toString(), 'namaLatin': surat.namaLatin.toString()});
 
         //     params: {
         //   'number': surat.nomor.toString(),
@@ -179,8 +172,7 @@ class SuratPage extends ConsumerWidget {
                       children: [
                         Text(
                           surat.namaLatin!,
-                          style: kPrimaryFontStyle.copyWith(
-                              fontSize: 14, letterSpacing: 1.2),
+                          style: kPrimaryFontStyle.copyWith(fontSize: 14, letterSpacing: 1.2),
                         ),
                         const SizedBox(
                           height: 3,
@@ -205,8 +197,7 @@ class SuratPage extends ConsumerWidget {
                 children: [
                   Text(
                     surat.nama!,
-                    style: kArabicFontAmiri.copyWith(
-                        fontSize: 14, letterSpacing: 1.2),
+                    style: kArabicFontAmiri.copyWith(fontSize: 14, letterSpacing: 1.2),
                   ),
                   const SizedBox(
                     width: 20,

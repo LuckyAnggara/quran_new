@@ -25,9 +25,21 @@ class MainPage extends StatelessWidget {
                 onPress: () {},
                 leftIcon: const Icon(Icons.dashboard_outlined),
                 title: 'Home',
-                rightIcon: const [
-                  Icon(Icons.person_outline),
-                  Icon(Icons.settings_outlined)
+                rightIcon: [
+                  RightIconButton(
+                    onPress: () {},
+                    icon: Icon(
+                      Icons.play_circle_outline,
+                      color: kSecondaryColor,
+                    ),
+                  ),
+                  RightIconButton(
+                    onPress: () {},
+                    icon: Icon(
+                      Icons.play_circle_outline,
+                      color: kSecondaryColor,
+                    ),
+                  )
                 ],
               ),
               Expanded(
