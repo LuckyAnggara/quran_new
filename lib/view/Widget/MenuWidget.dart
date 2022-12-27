@@ -57,8 +57,7 @@ class MenuWidget extends StatelessWidget {
                 ),
                 child: Text(
                   'Menu',
-                  style: kPrimaryFontStyle.copyWith(
-                      fontSize: 14, fontWeight: FontWeight.w500),
+                  style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ),
               Wrap(
@@ -114,7 +113,7 @@ class SeassionCard extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                context.go('$route');
+                context.push('$route');
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -131,8 +130,7 @@ class SeassionCard extends StatelessWidget {
                     Text(
                       title,
                       style: kPrimaryFontStyle.copyWith(
-                          fontSize: 14,
-                          color: isChoose ? Colors.white : kBlackColor),
+                          fontSize: 14, color: isChoose ? Colors.white : kBlackColor),
                     ),
                   ],
                 ),
@@ -195,8 +193,7 @@ class MenuCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: kPrimaryFontStyle.copyWith(
-                      color: isChoose ? Colors.white : kBlackColor),
+                  style: kPrimaryFontStyle.copyWith(color: isChoose ? Colors.white : kBlackColor),
                 ),
                 Text(
                   subTitle,

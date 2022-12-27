@@ -18,6 +18,10 @@ class AyahWidget extends ConsumerWidget {
     final isArabic = ref.watch(arabicStateProvider);
     final isTranslate = ref.watch(translateStateProvider);
     final isLatin = ref.watch(latinStateProvider);
+    final arabicFontSize = ref.watch(arabicSizeProvider);
+    final translateFontSize = ref.watch(translateSizeProvider);
+    final latinFontSize = ref.watch(latinSizeProvider);
+
     return Container(
       decoration: BoxDecoration(
         color: kSecondaryColorMoreBlack.withOpacity(0.15),
@@ -42,7 +46,7 @@ class AyahWidget extends ConsumerWidget {
                           ayat.ar.toString(),
                           textAlign: TextAlign.end,
                           style: kArabicFontAmiri.copyWith(
-                              fontSize: 28, fontWeight: FontWeight.w500),
+                              fontSize: arabicFontSize, fontWeight: FontWeight.w500),
                         ),
                       )
                     : SizedBox(),
@@ -56,7 +60,7 @@ class AyahWidget extends ConsumerWidget {
                           textAlign: TextAlign.start,
                           style: kPrimaryFontStyle.copyWith(
                               color: Colors.green,
-                              fontSize: 14,
+                              fontSize: latinFontSize,
                               fontWeight: FontWeight.w500),
                         ),
                       )
@@ -69,7 +73,7 @@ class AyahWidget extends ConsumerWidget {
                           ayat.idn.toString(),
                           textAlign: TextAlign.start,
                           style: kPrimaryFontStyle.copyWith(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                              fontSize: translateFontSize, fontWeight: FontWeight.w500),
                         ),
                       )
                     : SizedBox(),

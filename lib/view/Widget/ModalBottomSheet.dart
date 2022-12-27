@@ -8,8 +8,7 @@ class ModalBottomSheet extends StatelessWidget {
   final Widget child;
   final Color? backgroundColor;
 
-  ModalBottomSheet({Key? key, required this.child, this.backgroundColor})
-      : super(key: key);
+  ModalBottomSheet({Key? key, required this.child, this.backgroundColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +73,7 @@ class ModalFitSetting extends ConsumerWidget {
               trailing: Switch(
                 value: isArabic,
                 onChanged: (value) {
-                  ref
-                      .read(arabicStateProvider.notifier)
-                      .update((state) => !state);
+                  ref.read(arabicStateProvider.notifier).update((state) => !state);
                 },
                 activeTrackColor: kSecondaryColor.withOpacity(0.2),
                 activeColor: kSecondaryColor.withOpacity(1),
@@ -89,9 +86,7 @@ class ModalFitSetting extends ConsumerWidget {
               trailing: Switch(
                 value: isTranslate,
                 onChanged: (value) {
-                  ref
-                      .read(translateStateProvider.notifier)
-                      .update((state) => !state);
+                  ref.read(translateStateProvider.notifier).update((state) => !state);
                 },
                 activeTrackColor: kSecondaryColor.withOpacity(0.2),
                 activeColor: kSecondaryColor.withOpacity(1),
@@ -104,9 +99,7 @@ class ModalFitSetting extends ConsumerWidget {
               trailing: Switch(
                 value: isLatin,
                 onChanged: (value) {
-                  ref
-                      .read(latinStateProvider.notifier)
-                      .update((state) => !state);
+                  ref.read(latinStateProvider.notifier).update((state) => !state);
                 },
                 activeTrackColor: kSecondaryColor.withOpacity(0.2),
                 activeColor: kSecondaryColor.withOpacity(1),
@@ -132,9 +125,7 @@ class ModalFitSetting extends ConsumerWidget {
               trailing: Switch(
                 value: isDark,
                 onChanged: (value) {
-                  ref
-                      .read(darkStateProvider.notifier)
-                      .update((state) => !state);
+                  ref.read(darkStateProvider.notifier).update((state) => !state);
                 },
                 activeTrackColor: kSecondaryColor.withOpacity(0.2),
                 activeColor: kSecondaryColor.withOpacity(1),

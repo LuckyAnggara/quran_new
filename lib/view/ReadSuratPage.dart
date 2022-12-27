@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reverpod/controller/SuratController.dart';
-import 'package:reverpod/provider/setting_provider.dart';
 import 'package:reverpod/router.dart';
 import 'package:reverpod/view/Widget/AppBar.dart';
 import 'package:reverpod/view/Widget/AyatWidget.dart';
@@ -11,8 +10,7 @@ import '../constant.dart';
 import '../models/detail_surat.dart';
 
 class ReadSuratPage extends ConsumerWidget {
-  ReadSuratPage({Key? key, required this.nomor, required this.namaLatin})
-      : super(key: key);
+  ReadSuratPage({Key? key, required this.nomor, required this.namaLatin}) : super(key: key);
 
   final String? nomor;
   final String? namaLatin;
@@ -23,13 +21,6 @@ class ReadSuratPage extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        //   floatingActionButton: FloatingActionButton(
-        //     onPressed: () {},
-        //     backgroundColor: kSecondaryColor.withOpacity(1),
-        //     child: const Icon(
-        //       Icons.more_horiz,
-        //     ),
-        //   ),
         backgroundColor: kPrimaryColor,
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -37,7 +28,7 @@ class ReadSuratPage extends ConsumerWidget {
             children: [
               AppBarWidget(
                 onPress: () {
-                  router.go('/surat');
+                  router.pop();
                 },
                 leftIcon: const Icon(
                   Icons.arrow_back_ios,
@@ -74,24 +65,13 @@ class ReadSuratPage extends ConsumerWidget {
                             physics: const BouncingScrollPhysics(),
                             slivers: [
                               SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                    (context, index) {
+                                delegate: SliverChildBuilderDelegate((context, index) {
                                   Ayat ayat = items.ayat![index];
                                   return AyahWidget(ayat: ayat);
                                 }, childCount: items.ayat!.length),
                               )
                             ],
                           );
-                    // return SingleChildScrollView(
-                    //   physics: const BouncingScrollPhysics(),
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     children: List.generate(_data.ayat!.length, (index) {
-                    //       Ayat ayat = _data.ayat![index];
-                    //       return AyahWidget(ayat: ayat, onPlay: () {});
-                    //     }),
-                    //   ),
-                    // );
                   },
                   error: (err, stk) {
                     return SliverToBoxAdapter(

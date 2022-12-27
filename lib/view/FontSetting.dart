@@ -1,10 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reverpod/constant.dart';
 import 'package:reverpod/provider/setting_provider.dart';
-import 'package:reverpod/router.dart';
 import 'package:reverpod/view/Widget/AppBar.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -30,7 +29,7 @@ class FontSizeScreenSetting extends StatelessWidget {
               children: [
                 AppBarWidget(
                   onPress: () {
-                    router.go('/surat');
+                    context.pop();
                   },
                   leftIcon: Icon(Icons.arrow_back_ios),
                   title: 'Font Size',
@@ -52,11 +51,7 @@ class FontSizeScreenSetting extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * .7,
                     child: const TabBarView(
                       physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        PanelArabic(),
-                        PanelLatin(),
-                        PanelTerjemahan()
-                      ],
+                      children: [PanelArabic(), PanelLatin(), PanelTerjemahan()],
                     ))
               ],
             ),
@@ -216,8 +211,7 @@ class PanelTerjemahan extends ConsumerWidget {
                 child: Text(
               "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang",
               textAlign: TextAlign.start,
-              style: kPrimaryFontStyle.copyWith(
-                  fontSize: fontSize, fontWeight: FontWeight.w500),
+              style: kPrimaryFontStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
             )),
           ),
           SizedBox(
@@ -233,9 +227,7 @@ class PanelTerjemahan extends ConsumerWidget {
               minorTicksPerInterval: 0,
               stepSize: 1.0,
               onChanged: (dynamic value) {
-                ref
-                    .read(translateSizeProvider.notifier)
-                    .update((state) => value);
+                ref.read(translateSizeProvider.notifier).update((state) => value);
               },
             ),
           )

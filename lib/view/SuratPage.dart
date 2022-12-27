@@ -31,7 +31,7 @@ class SuratPage extends ConsumerWidget {
             children: [
               AppBarWidget(
                 onPress: () {
-                  context.go('/');
+                  context.pop();
                 },
                 leftIcon: const Icon(Icons.arrow_back_ios),
                 title: 'Al Qur\'an',
@@ -40,8 +40,7 @@ class SuratPage extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
@@ -53,8 +52,7 @@ class SuratPage extends ConsumerWidget {
                   children: [
                     Text(
                       'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(
-                          fontSize: 14, fontWeight: FontWeight.w500),
+                      style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -74,8 +72,7 @@ class SuratPage extends ConsumerWidget {
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
@@ -88,9 +85,7 @@ class SuratPage extends ConsumerWidget {
                       Text(
                         'Surat',
                         style: kPrimaryFontStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5),
+                            fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
                       ),
                       const SizedBox(
                         height: 15,
@@ -109,15 +104,12 @@ class SuratPage extends ConsumerWidget {
                                     physics: const BouncingScrollPhysics(),
                                     slivers: [
                                       SliverList(
-                                        delegate: SliverChildBuilderDelegate(
-                                            (context, index) {
+                                        delegate: SliverChildBuilderDelegate((context, index) {
                                           Surat surat = items[index];
                                           if (index == 2) {
-                                            return listSurat(
-                                                surat, true, context);
+                                            return listSurat(surat, true, context);
                                           }
-                                          return listSurat(
-                                              surat, false, context);
+                                          return listSurat(surat, false, context);
                                         }, childCount: items.length),
                                       )
                                     ],
@@ -160,10 +152,8 @@ class SuratPage extends ConsumerWidget {
   GestureDetector listSurat(Surat surat, bool isPlay, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed('baca', params: {
-          'nomor': surat.nomor.toString(),
-          'namaLatin': surat.namaLatin.toString()
-        });
+        context.pushNamed('baca',
+            params: {'nomor': surat.nomor.toString(), 'namaLatin': surat.namaLatin.toString()});
 
         //     params: {
         //   'number': surat.nomor.toString(),
@@ -205,8 +195,7 @@ class SuratPage extends ConsumerWidget {
                       children: [
                         Text(
                           surat.namaLatin!,
-                          style: kPrimaryFontStyle.copyWith(
-                              fontSize: 14, letterSpacing: 1.2),
+                          style: kPrimaryFontStyle.copyWith(fontSize: 14, letterSpacing: 1.2),
                         ),
                         const SizedBox(
                           height: 3,
@@ -231,16 +220,13 @@ class SuratPage extends ConsumerWidget {
                 children: [
                   Text(
                     surat.nama!,
-                    style: kArabicFontAmiri.copyWith(
-                        fontSize: 14, letterSpacing: 1.2),
+                    style: kArabicFontAmiri.copyWith(fontSize: 14, letterSpacing: 1.2),
                   ),
                   const SizedBox(
                     width: 20,
                   ),
                   Icon(
-                    isPlay
-                        ? Icons.pause_circle_filled_outlined
-                        : Icons.play_circle_outline,
+                    isPlay ? Icons.pause_circle_filled_outlined : Icons.play_circle_outline,
                     color: kSecondaryColor,
                     size: 26,
                   ),
