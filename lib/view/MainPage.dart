@@ -47,7 +47,7 @@ class MainPage extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      const LocationWidget(),
+                      LocationWidget(),
                       SizedBox(
                         height: size.height * .50,
                         width: size.width,

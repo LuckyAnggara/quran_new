@@ -16,14 +16,14 @@ class SuratPage extends ConsumerWidget {
     final _data = ref.watch(suratProvider);
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: kSecondaryColor.withOpacity(1),
-          child: const Icon(
-            Icons.search,
-            size: 30,
-          ),
-        ),
+        //   floatingActionButton: FloatingActionButton(
+        //     onPressed: () {},
+        //     backgroundColor: kSecondaryColor.withOpacity(1),
+        //     child: const Icon(
+        //       Icons.search,
+        //       size: 30,
+        //     ),
+        //   ),
         backgroundColor: kPrimaryColor,
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -40,7 +40,8 @@ class SuratPage extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
@@ -52,7 +53,8 @@ class SuratPage extends ConsumerWidget {
                   children: [
                     Text(
                       'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: kPrimaryFontStyle.copyWith(
+                          fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -72,7 +74,8 @@ class SuratPage extends ConsumerWidget {
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
@@ -85,31 +88,59 @@ class SuratPage extends ConsumerWidget {
                       Text(
                         'Surat',
                         style: kPrimaryFontStyle.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       Expanded(
                         child: _data.when(
-                          data: (_data) {
-                            return ListView.separated(
-                              separatorBuilder: (context, int) {
-                                return const Divider();
-                              },
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              itemCount: _data.length,
-                              itemBuilder: (context, index) {
-                                Surat surat = _data[index];
-                                if (index == 2) {
-                                  return listSurat(surat, true, context);
-                                }
-                                return listSurat(surat, false, context);
-                              },
+                          data: (items) {
+                            return items.isEmpty
+                                ? SliverToBoxAdapter(
+                                    child: Column(
+                                      children: const [],
+                                    ),
+                                  )
+                                : CustomScrollView(
+                                    shrinkWrap: true,
+                                    physics: const BouncingScrollPhysics(),
+                                    slivers: [
+                                      SliverList(
+                                        delegate: SliverChildBuilderDelegate(
+                                            (context, index) {
+                                          Surat surat = items[index];
+                                          if (index == 2) {
+                                            return listSurat(
+                                                surat, true, context);
+                                          }
+                                          return listSurat(
+                                              surat, false, context);
+                                        }, childCount: items.length),
+                                      )
+                                    ],
+                                  );
+                          },
+                          error: (err, stk) {
+                            return SliverToBoxAdapter(
+                              child: Center(
+                                child: Column(
+                                  children: const [
+                                    Icon(Icons.info),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      "Ada masalah",
+                                      style: TextStyle(color: Colors.black),
+                                    )
+                                  ],
+                                ),
+                              ),
                             );
                           },
-                          error: (err, s) => Text(err.toString()),
                           loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
@@ -126,11 +157,13 @@ class SuratPage extends ConsumerWidget {
     );
   }
 
-  GestureDetector listSurat(Surat surat, bool isBookmark, BuildContext context) {
+  GestureDetector listSurat(Surat surat, bool isPlay, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed('baca',
-            params: {'nomor': surat.nomor.toString(), 'namaLatin': surat.namaLatin.toString()});
+        context.goNamed('baca', params: {
+          'nomor': surat.nomor.toString(),
+          'namaLatin': surat.namaLatin.toString()
+        });
 
         //     params: {
         //   'number': surat.nomor.toString(),
@@ -172,7 +205,8 @@ class SuratPage extends ConsumerWidget {
                       children: [
                         Text(
                           surat.namaLatin!,
-                          style: kPrimaryFontStyle.copyWith(fontSize: 14, letterSpacing: 1.2),
+                          style: kPrimaryFontStyle.copyWith(
+                              fontSize: 14, letterSpacing: 1.2),
                         ),
                         const SizedBox(
                           height: 3,
@@ -197,13 +231,16 @@ class SuratPage extends ConsumerWidget {
                 children: [
                   Text(
                     surat.nama!,
-                    style: kArabicFontAmiri.copyWith(fontSize: 14, letterSpacing: 1.2),
+                    style: kArabicFontAmiri.copyWith(
+                        fontSize: 14, letterSpacing: 1.2),
                   ),
                   const SizedBox(
                     width: 20,
                   ),
                   Icon(
-                    isBookmark ? Icons.bookmark : Icons.bookmark_outline,
+                    isPlay
+                        ? Icons.pause_circle_filled_outlined
+                        : Icons.play_circle_outline,
                     color: kSecondaryColor,
                     size: 26,
                   ),
@@ -211,7 +248,7 @@ class SuratPage extends ConsumerWidget {
                     width: 10,
                   ),
                   Icon(
-                    isBookmark ? Icons.download : Icons.download,
+                    isPlay ? Icons.download : Icons.download,
                     color: kSecondaryColor,
                     size: 26,
                   ),

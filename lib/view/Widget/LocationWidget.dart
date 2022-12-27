@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant.dart';
+import '../../controller/StorageController.dart';
 
 class LocationWidget extends StatelessWidget {
-  const LocationWidget({super.key});
+  final String location = 'Bandung';
 
   @override
   Widget build(BuildContext context) {
@@ -13,30 +15,26 @@ class LocationWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'My Location',
-                style: kPrimaryFontStyle,
-              ),
-              Text(
-                'BANDUNG',
-                style: kSecondaryFontStyle,
-              ),
-            ],
-          ),
-          SizedBox(
-            width: 24,
-          ),
           GestureDetector(
             onTap: () {},
             child: Icon(
               Icons.location_pin,
-              size: 18,
+              size: 14,
               color: kSecondaryColor,
             ),
           ),
+          const SizedBox(
+            width: 8,
+          ),
+          location.isEmpty
+              ? Text(
+                  'My Location',
+                  style: kPrimaryFontStyle,
+                )
+              : Text(
+                  'BANDUNG',
+                  style: kSecondaryFontStyle,
+                ),
         ],
       ),
     );

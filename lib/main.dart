@@ -3,21 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reverpod/router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'controller/StorageController.dart';
 
 void main() async {
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      runApp(
-        const ProviderScope(
-          child: MyApp(),
-        ),
-      );
-    },
-    (Object error, StackTrace stack) {
-      debugPrint(error.toString());
-      debugPrint(stack.toString());
-    },
+  runApp(
+    ProviderScope(
+      child: const MyApp(),
+    ),
   );
 }
 
