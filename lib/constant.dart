@@ -13,6 +13,8 @@ Color kBlackSecondaryColor = '#323232'.toColor();
 
 Color kShadowColor = const Color(0xFFE6E6E6);
 
+double kFontSize = 16;
+
 TextStyle kPrimaryFontStyle = GoogleFonts.roboto(
   fontSize: 16,
   fontWeight: FontWeight.w500,

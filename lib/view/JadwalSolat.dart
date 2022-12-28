@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../controller/SuratController.dart';
+import '../provider/provider.dart';
 
 class JadwalSolat extends ConsumerWidget {
   const JadwalSolat({Key? key}) : super(key: key);

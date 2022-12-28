@@ -34,7 +34,7 @@ class NetworkService {
 }
 
 class PrayTimeServices {
-  Future<List<Kota>?> getKota() async {
+  Future<List<Kota>> getKota() async {
     var url = Uri.parse('${ApiConstants.prayTimeUrl}/sholat/kota/semua');
     var res = await http.get(url);
 
@@ -47,7 +47,8 @@ class PrayTimeServices {
   }
 
   Future<Jadwal> getJadwal(String locationId) async {
-    var url = Uri.parse('${ApiConstants.prayTimeUrl}/sholat/jadwal/$locationId/2022/05/22');
+    var url = Uri.parse(
+        '${ApiConstants.prayTimeUrl}/sholat/jadwal/$locationId/2022/05/22');
     var res = await http.get(url);
 
     if (res.statusCode == 200) {
@@ -61,4 +62,5 @@ class PrayTimeServices {
 
 // API SERVICE PROVIDER
 final apiQuranProvider = Provider<NetworkService>((ref) => NetworkService());
-final apiShalatProvider = Provider<PrayTimeServices>((ref) => PrayTimeServices());
+final apiShalatProvider =
+    Provider<PrayTimeServices>((ref) => PrayTimeServices());

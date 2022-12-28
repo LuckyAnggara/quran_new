@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constant.dart';
-import '../../controller/StorageController.dart';
 
 class LocationWidget extends StatelessWidget {
   final String location = 'Bandung';
@@ -16,7 +16,9 @@ class LocationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.pushNamed('kota');
+            },
             child: Icon(
               Icons.location_pin,
               size: 14,

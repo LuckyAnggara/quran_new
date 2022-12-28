@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reverpod/models/kota.dart';
 
 import '../models/detail_surat.dart';
 import '../models/surat.dart';
@@ -13,3 +14,7 @@ final bacaProvider = FutureProvider.family<DetailSurat, String>(
     return ref.read(apiQuranProvider).getDetailSurat(id);
   },
 );
+
+final daftarKotaProvider = FutureProvider.autoDispose<List<Kota>>((ref) async {
+  return ref.read(apiShalatProvider).getKota();
+});

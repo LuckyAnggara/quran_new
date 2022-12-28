@@ -24,7 +24,7 @@ class PrayerTimeWidget extends ConsumerWidget {
             Radius.circular(18),
           ),
         ),
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         child: Column(
           children: [
             Row(children: [
@@ -109,7 +109,7 @@ class PrayerTimeCard extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 5),
+            margin: const EdgeInsets.only(bottom: 5),
             width: 70,
             height: 80,
             decoration: const BoxDecoration(

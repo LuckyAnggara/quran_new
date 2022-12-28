@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reverpod/router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'controller/StorageController.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('setting');
   runApp(
     ProviderScope(
       child: const MyApp(),
@@ -22,8 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
-      title: 'Flutter Demo',
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

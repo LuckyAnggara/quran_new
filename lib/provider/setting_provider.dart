@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:reverpod/models/setting.dart';
 
 final arabicStateProvider = StateProvider<bool>((ref) {
   return false;

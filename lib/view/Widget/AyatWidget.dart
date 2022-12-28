@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:reverpod/constant.dart';
 import 'package:reverpod/models/detail_surat.dart';
+import 'package:reverpod/models/setting.dart';
 import 'package:reverpod/provider/setting_provider.dart';
 
 class AyahWidget extends ConsumerWidget {
@@ -15,9 +16,10 @@ class AyahWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isArabic = ref.watch(arabicStateProvider);
-    final isTranslate = ref.watch(translateStateProvider);
-    final isLatin = ref.watch(latinStateProvider);
+    setting(string) =>
+        ref.watch(settingNotifierProvider).setting.getBool(string);
+    fontSize(string) =>
+        ref.watch(settingNotifierProvider).setting.getDouble(string);
     final arabicFontSize = ref.watch(arabicSizeProvider);
     final translateFontSize = ref.watch(translateSizeProvider);
     final latinFontSize = ref.watch(latinSizeProvider);
@@ -38,7 +40,7 @@ class AyahWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //ARAB
-                isArabic
+                setting('arabicShow')
                     ? Container(
                         margin: EdgeInsets.only(top: 10),
                         width: double.infinity,
@@ -46,12 +48,13 @@ class AyahWidget extends ConsumerWidget {
                           ayat.ar.toString(),
                           textAlign: TextAlign.end,
                           style: kArabicFontAmiri.copyWith(
-                              fontSize: arabicFontSize, fontWeight: FontWeight.w500),
+                              fontSize: fontSize('arabicFontSize'),
+                              fontWeight: FontWeight.w500),
                         ),
                       )
                     : SizedBox(),
                 //Latin
-                isLatin
+                setting('latinShow')
                     ? Container(
                         margin: EdgeInsets.symmetric(vertical: 5),
                         width: double.infinity,
@@ -60,20 +63,21 @@ class AyahWidget extends ConsumerWidget {
                           textAlign: TextAlign.start,
                           style: kPrimaryFontStyle.copyWith(
                               color: Colors.green,
-                              fontSize: latinFontSize,
+                              fontSize: fontSize('latinFontSize'),
                               fontWeight: FontWeight.w500),
                         ),
                       )
                     : SizedBox(),
                 //Translate
-                isTranslate
+                setting('translateShow')
                     ? Container(
                         width: double.infinity,
                         child: Text(
                           ayat.idn.toString(),
                           textAlign: TextAlign.start,
                           style: kPrimaryFontStyle.copyWith(
-                              fontSize: translateFontSize, fontWeight: FontWeight.w500),
+                              fontSize: fontSize('translateFontSize'),
+                              fontWeight: FontWeight.w500),
                         ),
                       )
                     : SizedBox(),

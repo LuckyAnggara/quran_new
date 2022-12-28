@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constant.dart';
-import '../controller/SuratController.dart';
+import '../provider/provider.dart';
 import '../models/surat.dart';
 import 'Widget/AppBar.dart';
 
@@ -16,14 +17,6 @@ class SuratPage extends ConsumerWidget {
     final _data = ref.watch(suratProvider);
     return SafeArea(
       child: Scaffold(
-        //   floatingActionButton: FloatingActionButton(
-        //     onPressed: () {},
-        //     backgroundColor: kSecondaryColor.withOpacity(1),
-        //     child: const Icon(
-        //       Icons.search,
-        //       size: 30,
-        //     ),
-        //   ),
         backgroundColor: kPrimaryColor,
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -40,7 +33,8 @@ class SuratPage extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
@@ -52,7 +46,8 @@ class SuratPage extends ConsumerWidget {
                   children: [
                     Text(
                       'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: kPrimaryFontStyle.copyWith(
+                          fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -72,7 +67,8 @@ class SuratPage extends ConsumerWidget {
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
@@ -85,7 +81,9 @@ class SuratPage extends ConsumerWidget {
                       Text(
                         'Surat',
                         style: kPrimaryFontStyle.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5),
                       ),
                       const SizedBox(
                         height: 15,
@@ -104,12 +102,15 @@ class SuratPage extends ConsumerWidget {
                                     physics: const BouncingScrollPhysics(),
                                     slivers: [
                                       SliverList(
-                                        delegate: SliverChildBuilderDelegate((context, index) {
+                                        delegate: SliverChildBuilderDelegate(
+                                            (context, index) {
                                           Surat surat = items[index];
                                           if (index == 2) {
-                                            return listSurat(surat, true, context);
+                                            return listSurat(
+                                                surat, true, context);
                                           }
-                                          return listSurat(surat, false, context);
+                                          return listSurat(
+                                              surat, false, context);
                                         }, childCount: items.length),
                                       )
                                     ],
@@ -133,8 +134,11 @@ class SuratPage extends ConsumerWidget {
                               ),
                             );
                           },
-                          loading: () => const Center(
-                            child: CircularProgressIndicator(),
+                          loading: () => Center(
+                            child: SpinKitWave(
+                              color: kSecondaryColor,
+                              size: 24,
+                            ),
                           ),
                         ),
                       )
@@ -152,26 +156,10 @@ class SuratPage extends ConsumerWidget {
   GestureDetector listSurat(Surat surat, bool isPlay, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed('baca',
-            params: {'nomor': surat.nomor.toString(), 'namaLatin': surat.namaLatin.toString()});
-
-        //     params: {
-        //   'number': surat.nomor.toString(),
-        //   'name': surat.namaLatin!,
-        //   'translation': surat.arti!,
-        //   'revelation': surat.tempatTurun!,
-        //   'ayat': surat.jumlahAyat.toString()
-        // });
-        // Get.toNamed(
-        //   '/read-quran/${surat.nomor}',
-        //   arguments: {
-        //     'number': surat.nomor,
-        //     'name': surat.namaLatin,
-        //     'translation': surat.arti,
-        //     'revelation': surat.tempatTurun,
-        //     'ayat': surat.jumlahAyat
-        //   },
-        // );
+        context.pushNamed(
+          'baca',
+          extra: surat,
+        );
       },
       child: InkWell(
         child: Container(
@@ -195,7 +183,8 @@ class SuratPage extends ConsumerWidget {
                       children: [
                         Text(
                           surat.namaLatin!,
-                          style: kPrimaryFontStyle.copyWith(fontSize: 14, letterSpacing: 1.2),
+                          style: kPrimaryFontStyle.copyWith(
+                              fontSize: 14, letterSpacing: 1.2),
                         ),
                         const SizedBox(
                           height: 3,
@@ -220,13 +209,16 @@ class SuratPage extends ConsumerWidget {
                 children: [
                   Text(
                     surat.nama!,
-                    style: kArabicFontAmiri.copyWith(fontSize: 14, letterSpacing: 1.2),
+                    style: kArabicFontAmiri.copyWith(
+                        fontSize: 14, letterSpacing: 1.2),
                   ),
                   const SizedBox(
                     width: 20,
                   ),
                   Icon(
-                    isPlay ? Icons.pause_circle_filled_outlined : Icons.play_circle_outline,
+                    isPlay
+                        ? Icons.pause_circle_filled_outlined
+                        : Icons.play_circle_outline,
                     color: kSecondaryColor,
                     size: 26,
                   ),

@@ -11,14 +11,32 @@ import 'package:reverpod/view/Widget/ModalBottomSheet.dart';
 import '../constant.dart';
 import '../models/detail_surat.dart';
 
-class ReadSuratPage extends ConsumerWidget {
+class ReadSuratPage extends ConsumerStatefulWidget {
   const ReadSuratPage({Key? key, required this.surat}) : super(key: key);
 
   final Surat surat;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(bacaProvider(surat.nomor.toString()));
+  ReadSuratPageState createState() => ReadSuratPageState();
+}
+
+class ReadSuratPageState extends ConsumerState<ReadSuratPage> {
+  ScrollController _controller = ScrollController();
+  String message = '';
+
+  _scrollListener() {
+    print(_controller.offset);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_scrollListener);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _data = ref.watch(bacaProvider(widget.surat.nomor.toString()));
 
     return SafeArea(
       child: Scaffold(
@@ -34,7 +52,8 @@ class ReadSuratPage extends ConsumerWidget {
                 leftIcon: const Icon(
                   Icons.arrow_back_ios,
                 ),
-                title: surat.namaLatin.toString(),
+                //     title: widget.surat.namaLatin.toString(),
+                title: message,
                 rightIcon: [
                   RightIconButton(
                     onPress: () {
@@ -64,6 +83,7 @@ class ReadSuratPage extends ConsumerWidget {
                         : CustomScrollView(
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
+                            controller: _controller,
                             slivers: [
                               SliverList(
                                 delegate: SliverChildBuilderDelegate(

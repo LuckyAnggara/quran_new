@@ -6,13 +6,13 @@ import '../../constant.dart';
 class MenuWidget extends StatelessWidget {
   List<SeassionCard> menu = const [
     SeassionCard(
-      route: '/surat',
+      route: 'surat',
       title: 'Baca Al-Qur\'an',
       image: 'assets/icons/book.png',
       subTitle: 'Baca dan Dengarkan',
     ),
     SeassionCard(
-      route: '/jadwal',
+      route: 'jadwal',
       image: 'assets/icons/pray.png',
       title: 'Jadwal Shalat',
       subTitle: 'Jadwal shalat lengkap',
@@ -57,7 +57,8 @@ class MenuWidget extends StatelessWidget {
                 ),
                 child: Text(
                   'Menu',
-                  style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: kPrimaryFontStyle.copyWith(
+                      fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ),
               Wrap(
@@ -65,15 +66,6 @@ class MenuWidget extends StatelessWidget {
                 runSpacing: 20,
                 children: menu.toList(),
               )
-              // GridView(
-              //   shrinkWrap: true,
-              //   physics: NeverScrollableScrollPhysics(),
-              //   scrollDirection: Axis.vertical,
-              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 2,
-              //   ),
-              //   children: const [MenuWidget(), MenuWidget(), MenuWidget(), MenuWidget()],
-              // )
             ],
           ),
         ));
@@ -113,7 +105,7 @@ class SeassionCard extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                context.push('$route');
+                context.pushNamed('$route');
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -130,7 +122,8 @@ class SeassionCard extends StatelessWidget {
                     Text(
                       title,
                       style: kPrimaryFontStyle.copyWith(
-                          fontSize: 14, color: isChoose ? Colors.white : kBlackColor),
+                          fontSize: 14,
+                          color: isChoose ? Colors.white : kBlackColor),
                     ),
                   ],
                 ),
@@ -193,7 +186,8 @@ class MenuCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: kPrimaryFontStyle.copyWith(color: isChoose ? Colors.white : kBlackColor),
+                  style: kPrimaryFontStyle.copyWith(
+                      color: isChoose ? Colors.white : kBlackColor),
                 ),
                 Text(
                   subTitle,
