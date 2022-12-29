@@ -50,14 +50,15 @@ class DateCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const ClockWidget(
+                  size: 36,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Magrib dalam 5 Menit',
                   style: kPrimaryWhiteFontStyle.copyWith(fontSize: 11),
-                ),
-                const ClockWidget(),
-                Text(
-                  'Jangan lupa shalat Dhuha',
-                  style: kPrimaryWhiteFontStyle.copyWith(fontSize: 16),
                 ),
               ],
             ),

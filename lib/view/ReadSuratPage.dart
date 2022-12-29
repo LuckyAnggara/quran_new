@@ -34,7 +34,7 @@ class ReadSuratPage extends ConsumerWidget {
                 leftIcon: const Icon(
                   Icons.arrow_back_ios,
                 ),
-                title: surat.namaLatin.toString(),
+                title: 'Baca surat ${surat.namaLatin.toString()}',
                 rightIcon: [
                   RightIconButton(
                     onPress: () {
@@ -65,6 +65,12 @@ class ReadSuratPage extends ConsumerWidget {
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
                             slivers: [
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                  return CardDetailSurah(surat: surat);
+                                }, childCount: 1),
+                              ),
                               SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                     (context, index) {
@@ -104,6 +110,84 @@ class ReadSuratPage extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CardDetailSurah extends ConsumerWidget {
+  const CardDetailSurah({Key? key, required this.surat}) : super(key: key);
+
+  final Surat surat;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 30),
+      padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [kSecondaryColor.withOpacity(0.8), kSecondaryColor],
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            surat.nama!,
+            style: kPrimaryWhiteFontStyle.copyWith(
+                fontSize: 22, fontWeight: FontWeight.w500, letterSpacing: 1.2),
+          ),
+          Text(
+            surat.namaLatin!,
+            style: kPrimaryWhiteFontStyle.copyWith(
+                fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                surat.tempatTurun!,
+                style: kPrimaryWhiteFontStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    letterSpacing: 1),
+              ),
+              Text(
+                ' - ',
+                style: kPrimaryWhiteFontStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    letterSpacing: 1),
+              ),
+              Text(
+                '${surat.jumlahAyat!} Ayat',
+                style: kPrimaryWhiteFontStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    letterSpacing: 1),
+              ),
+            ],
+          ),
+          Divider(
+            thickness: 1.0,
+            color: Colors.white54,
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Image.asset(
+            'assets/card/bismilah.png',
+            color: Colors.white70,
+          ),
+        ],
       ),
     );
   }

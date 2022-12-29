@@ -29,3 +29,7 @@ final latinSizeProvider = StateProvider<double>((ref) {
 final translateSizeProvider = StateProvider<double>((ref) {
   return 14;
 });
+
+final locationDefaultProvider = StateProvider<int>((ref) {
+  return 1301;
+});

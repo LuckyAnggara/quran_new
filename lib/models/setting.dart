@@ -14,7 +14,18 @@ class Setting {
     return box.containsKey(value) ? box.get(value) : kFontSize;
   }
 
+  String getString(String value) {
+    if (value == 'lokasiId') {
+      return box.containsKey(value) ? box.get(value) : '1301';
+    }
+    return box.containsKey(value) ? box.get(value) : '';
+  }
+
   setBool(String keyValue, bool value) {
+    box.put(keyValue, value);
+  }
+
+  setString(String keyValue, String value) {
     box.put(keyValue, value);
   }
 
@@ -30,6 +41,11 @@ class SettingNotifier extends ChangeNotifier {
 
   void updateKeyBool(String keyValue, value) {
     setting.setBool(keyValue, value);
+    notifyListeners();
+  }
+
+  void updateKeyString(String keyValue, value) {
+    setting.setString(keyValue, value);
     notifyListeners();
   }
 

@@ -20,9 +20,6 @@ class AyahWidget extends ConsumerWidget {
         ref.watch(settingNotifierProvider).setting.getBool(string);
     fontSize(string) =>
         ref.watch(settingNotifierProvider).setting.getDouble(string);
-    final arabicFontSize = ref.watch(arabicSizeProvider);
-    final translateFontSize = ref.watch(translateSizeProvider);
-    final latinFontSize = ref.watch(latinSizeProvider);
 
     return Container(
       decoration: BoxDecoration(

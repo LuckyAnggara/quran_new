@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:reverpod/provider/provider.dart';
 
 import '../../constant.dart';
 import '../../models/jadwal_sholat.dart';
 import '../../service/network_service.dart';
-
-final jadwalProvider = FutureProvider<Jadwal>((ref) async {
-  return ref.read(apiShalatProvider).getJadwal('0103');
-});
 
 class PrayerTimeWidget extends ConsumerWidget {
   @override

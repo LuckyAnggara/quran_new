@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reverpod/models/surat.dart';
+import 'package:reverpod/view/CompasPage.dart';
 import 'package:reverpod/view/LocationPage.dart';
 import 'package:reverpod/view/NotFoundPage.dart';
 import 'package:reverpod/view/FontSetting.dart';
@@ -115,6 +116,24 @@ final GoRouter router = GoRouter(routes: <RouteBase>[
           return CustomTransitionPage(
             key: state.pageKey,
             child: JadwalSolat(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity:
+                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        path: 'compas',
+        name: 'compas',
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: CompasPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(

@@ -49,7 +49,7 @@ class MainPage extends StatelessWidget {
                     children: [
                       LocationWidget(),
                       SizedBox(
-                        height: size.height * .50,
+                        height: size.height * .57,
                         width: size.width,
                         child: Stack(
                           children: [

@@ -14,11 +14,11 @@ class MenuWidget extends StatelessWidget {
     SeassionCard(
       route: 'jadwal',
       image: 'assets/icons/pray.png',
-      title: 'Jadwal Shalat',
+      title: 'Doa Sehari - Hari',
       subTitle: 'Jadwal shalat lengkap',
     ),
     SeassionCard(
-      route: '',
+      route: 'compas',
       title: 'Qiblat',
       image: 'assets/icons/compas.png',
       subTitle: 'Cari qiblat',

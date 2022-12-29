@@ -4,7 +4,11 @@ import 'package:intl/intl.dart';
 import '../../constant.dart';
 
 class ClockWidget extends StatelessWidget {
-  const ClockWidget({Key? key}) : super(key: key);
+  const ClockWidget({Key? key, required this.size})
+      : super(
+          key: key,
+        );
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,7 @@ class ClockWidget extends StatelessWidget {
         builder: (context, snapshot) {
           return Text(
             DateFormat('hh:mm:ss').format(DateTime.now()),
-            style: kPrimaryWhiteFontStyle.copyWith(fontSize: 24),
+            style: kPrimaryWhiteFontStyle.copyWith(fontSize: size ?? 24),
           );
         },
       ),

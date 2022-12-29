@@ -12,6 +12,8 @@ Color kGreySecondaryColor = '#B6B9BF'.toColor();
 Color kBlackSecondaryColor = '#323232'.toColor();
 
 Color kShadowColor = const Color(0xFFE6E6E6);
+double kDialogpadding = 20;
+double kDialogavatarRadius = 45;
 
 double kFontSize = 16;
 

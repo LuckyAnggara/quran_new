@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constant.dart';
@@ -36,31 +37,17 @@ class SuratPage extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
                   borderRadius: BorderRadius.all(
                     Radius.circular(12),
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(
-                          fontSize: 14, fontWeight: FontWeight.w500),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10, bottom: 10),
-                      height: 25,
-                      child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 2,
-                          itemBuilder: (context, index) {
-                            // return lastReadContainer();
-                          }),
-                    ),
-                  ],
+                child: Container(
+                  child: SvgPicture.asset(
+                    'assets/svg/quran.svg',
+                    color: kSecondaryColor,
+                    height: 72,
+                    width: 72,
+                  ),
                 ),
               ),
               Expanded(
@@ -164,37 +151,49 @@ class SuratPage extends ConsumerWidget {
       child: InkWell(
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           width: double.infinity,
           child: Row(
             children: [
               Row(
                 children: [
-                  Text(
-                    surat.nomor.toString(),
-                    style: kPrimaryFontStyle.copyWith(fontSize: 14),
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/svg/segi-delapan.svg',
+                        color: kSecondaryColor,
+                        height: 24,
+                        width: 24,
+                      ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "${surat.nomor}",
+                            style: kPrimaryFontStyle.copyWith(
+                              fontSize: 11,
+                            ),
+                          ))
+                    ],
                   ),
                   const SizedBox(
-                    width: 15,
+                    width: 10,
                   ),
-                  Container(
-                    width: 105,
+                  SizedBox(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           surat.namaLatin!,
-                          style: kPrimaryFontStyle.copyWith(
-                              fontSize: 14, letterSpacing: 1.2),
+                          style: kPrimaryFontStyle.copyWith(fontSize: 12),
                         ),
                         const SizedBox(
                           height: 3,
                         ),
-                        AutoSizeText(
-                          surat.arti!,
-                          style: kSecondaryGreyFontStyle.copyWith(
-                            fontSize: 5,
-                          ),
-                          maxLines: 2,
+                        Text(
+                          surat.namaLatin!,
+                          style: kPrimaryFontStyle.copyWith(
+                              fontSize: 9, overflow: TextOverflow.ellipsis),
                         ),
                       ],
                     ),
@@ -210,7 +209,7 @@ class SuratPage extends ConsumerWidget {
                   Text(
                     surat.nama!,
                     style: kArabicFontAmiri.copyWith(
-                        fontSize: 14, letterSpacing: 1.2),
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     width: 20,
@@ -226,7 +225,7 @@ class SuratPage extends ConsumerWidget {
                     width: 10,
                   ),
                   Icon(
-                    isPlay ? Icons.download : Icons.download,
+                    isPlay ? Icons.download : Icons.download_outlined,
                     color: kSecondaryColor,
                     size: 26,
                   ),
