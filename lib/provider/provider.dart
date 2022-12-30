@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:reverpod/models/jadwal_sholat.dart';
 import 'package:reverpod/models/kota.dart';
+import 'package:reverpod/models/now_playing.dart';
 import 'package:reverpod/models/setting.dart';
 import 'package:reverpod/provider/setting_provider.dart';
 
@@ -56,4 +58,15 @@ final jadwalProvider = FutureProvider<Jadwal>((ref) async {
   final locationId =
       ref.watch(settingNotifierProvider).setting.getString('lokasiId');
   return ref.read(apiShalatProvider).getJadwal(locationId);
+});
+
+final nowPlayingProvider = ChangeNotifierProvider<NowPlaying>((ref) {
+  return NowPlaying();
+});
+
+final justAudioProvider = FutureProvider<AudioPlayer>((ref) {
+  final AudioPlayer audioPlayer = AudioPlayer();
+  final nowPlaying = ref.watch(nowPlayingProvider);
+  audioPlayer.setUrl(nowPlaying.getUrl);
+  return audioPlayer;
 });

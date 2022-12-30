@@ -6,7 +6,7 @@ import 'package:reverpod/models/surat.dart';
 import 'package:reverpod/router.dart';
 import 'package:reverpod/view/Widget/AppBar.dart';
 import 'package:reverpod/view/Widget/AyatWidget.dart';
-import 'package:reverpod/view/Widget/ModalBottomSheet.dart';
+import 'package:reverpod/view/Widget/ModalBottomSheetSetting.dart';
 
 import '../constant.dart';
 import '../models/detail_surat.dart';

@@ -1,47 +1,47 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 import '../constant.dart';
 import '../provider/provider.dart';
 import '../models/surat.dart';
-import 'Widget/AppBar.dart';
 
 class SuratPage extends ConsumerWidget {
   const SuratPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(suratProvider);
+    final data = ref.watch(suratProvider);
+    final play = ref.watch(nowPlayingProvider);
+
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0,
+          backgroundColor: kPrimaryColor,
+          title: Text(
+            "Al Qur'an",
+            style: kPrimaryFontStyle,
+          ),
+        ),
         backgroundColor: kPrimaryColor,
         body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
           child: Column(
             children: [
-              AppBarWidget(
-                onPress: () {
-                  context.pop();
-                },
-                leftIcon: const Icon(Icons.arrow_back_ios),
-                title: 'Al Qur\'an',
-                rightIcon: const [],
-              ),
               Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5),
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(
                     Radius.circular(12),
                   ),
                 ),
-                child: Container(
+                child: SizedBox(
                   child: SvgPicture.asset(
                     'assets/svg/quran.svg',
                     color: kSecondaryColor,
@@ -54,10 +54,12 @@ class SuratPage extends ConsumerWidget {
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 12,
+                  ),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.transparent,
                     borderRadius: BorderRadius.all(
                       Radius.circular(12),
                     ),
@@ -68,15 +70,15 @@ class SuratPage extends ConsumerWidget {
                       Text(
                         'Surat',
                         style: kPrimaryFontStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1.2),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 5,
                       ),
                       Expanded(
-                        child: _data.when(
+                        child: data.when(
                           data: (items) {
                             return items.isEmpty
                                 ? SliverToBoxAdapter(
@@ -92,12 +94,23 @@ class SuratPage extends ConsumerWidget {
                                         delegate: SliverChildBuilderDelegate(
                                             (context, index) {
                                           Surat surat = items[index];
-                                          if (index == 2) {
-                                            return listSurat(
-                                                surat, true, context);
+                                          if (play.id ==
+                                              surat.nomor.toString()) {
+                                            return SuratWidget(
+                                              surat: surat,
+                                              isPlay: true,
+                                              context: context,
+                                              ref: ref,
+                                            );
+                                            //   return listSurat(
+                                            //       surat, true, context, ref);
                                           }
-                                          return listSurat(
-                                              surat, false, context);
+                                          return SuratWidget(
+                                            surat: surat,
+                                            isPlay: false,
+                                            context: context,
+                                            ref: ref,
+                                          );
                                         }, childCount: items.length),
                                       )
                                     ],
@@ -140,7 +153,8 @@ class SuratPage extends ConsumerWidget {
     );
   }
 
-  GestureDetector listSurat(Surat surat, bool isPlay, BuildContext context) {
+  GestureDetector listSurat(
+      Surat surat, bool isPlay, BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
         context.pushNamed(
@@ -214,12 +228,33 @@ class SuratPage extends ConsumerWidget {
                   const SizedBox(
                     width: 20,
                   ),
-                  Icon(
-                    isPlay
-                        ? Icons.pause_circle_filled_outlined
-                        : Icons.play_circle_outline,
-                    color: kSecondaryColor,
-                    size: 26,
+                  GestureDetector(
+                    onTap: () {
+                      if (!isPlay) {
+                        ref
+                            .read(nowPlayingProvider.notifier)
+                            .setId(surat.nomor.toString());
+                        ref
+                            .read(nowPlayingProvider.notifier)
+                            .setUrl(surat.audio.toString());
+
+                        // ref.read(justAudioProvider).when(
+                        //     data: (play) => play.play(),
+                        //     error: (error, t) => print(error.toString()),
+                        //     loading: () => print('loading'));
+                      } else {
+                        ref.read(nowPlayingProvider.notifier).setId("0");
+
+                        ref.read(nowPlayingProvider.notifier).setUrl("");
+                      }
+                    },
+                    child: Icon(
+                      isPlay
+                          ? Icons.pause_circle_filled_outlined
+                          : Icons.play_circle_outline,
+                      color: kSecondaryColor,
+                      size: 26,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -237,22 +272,182 @@ class SuratPage extends ConsumerWidget {
       ),
     );
   }
-//
-// Container lastReadContainer() {
-//   return Container(
-//     margin: EdgeInsets.only(right: 15),
-//     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-//     decoration: BoxDecoration(
-//       color: Colors.white,
-//       border: Border.all(color: kSecondaryColor),
-//       borderRadius: BorderRadius.all(
-//         Radius.circular(5),
-//       ),
-//     ),
-//     child: Text(
-//       'Al-Fatihah',
-//       style: kSecondaryGreyFontStyle.copyWith(fontSize: 12),
-//     ),
-//   );
-// }
+}
+
+class SuratWidget extends StatelessWidget {
+  final Surat surat;
+  final bool isPlay;
+  final BuildContext context;
+  final WidgetRef ref;
+
+  const SuratWidget(
+      {super.key,
+      required this.surat,
+      required this.isPlay,
+      required this.context,
+      required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(18),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: kPrimaryColor.withOpacity(0.1),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(5, 2), // changes position of shadow
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
+      margin: const EdgeInsets.symmetric(vertical: 5.0),
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          context.pushNamed(
+            'baca',
+            extra: surat,
+          );
+        },
+        child: InkWell(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            width: double.infinity,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svg/segi-delapan.svg',
+                              color: kSecondaryColor,
+                              height: 24,
+                              width: 24,
+                            ),
+                            Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "${surat.nomor}",
+                                  style: kPrimaryFontStyle.copyWith(
+                                    fontSize: 11,
+                                  ),
+                                ))
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                surat.namaLatin!,
+                                style: kPrimaryFontStyle.copyWith(fontSize: 12),
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                surat.namaLatin!,
+                                style: kPrimaryFontStyle.copyWith(
+                                    fontSize: 9,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          surat.nama!,
+                          style: kArabicFontAmiri.copyWith(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (!isPlay) {
+                              ref
+                                  .read(nowPlayingProvider.notifier)
+                                  .setId(surat.nomor.toString());
+                              ref
+                                  .read(nowPlayingProvider.notifier)
+                                  .setUrl(surat.audio.toString());
+
+                              // ref.read(justAudioProvider).when(
+                              //     data: (play) => play.play(),
+                              //     error: (error, t) => print(error.toString()),
+                              //     loading: () => print('loading'));
+                            } else {
+                              ref.read(nowPlayingProvider.notifier).setId("0");
+
+                              ref.read(nowPlayingProvider.notifier).setUrl("");
+                            }
+                          },
+                          child: Icon(
+                            isPlay
+                                ? Icons.pause_circle_filled_outlined
+                                : Icons.play_circle_outline,
+                            color: kSecondaryColor,
+                            size: 26,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          isPlay ? Icons.download : Icons.download_outlined,
+                          color: kSecondaryColor,
+                          size: 26,
+                        ),
+                      ],
+                    ))
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                LinearPercentIndicator(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  curve: Curves.bounceIn,
+                  progressColor: kSecondaryColor,
+                  backgroundColor: Colors.grey,
+                  barRadius: Radius.circular(15.0),
+                  animation: true,
+                  lineHeight: 10.0,
+                  animationDuration: 100,
+                  percent: .2,
+                  center: Text(
+                    "20%",
+                    style: kPrimaryFontStyle.copyWith(
+                      fontSize: 8,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

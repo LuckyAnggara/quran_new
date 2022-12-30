@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
+import 'package:reverpod/helper.dart';
 
 import '../../constant.dart';
 import 'JamWidget.dart';
@@ -35,14 +36,11 @@ class DateCardWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                  DateFormat('EEEE dd, MMM yyyy', 'en_US')
-                      .format(DateTime.now())
-                      .toString(),
+              Text(formatTglIndo(DateTime.now().toString()),
                   style: kPrimaryWhiteFontStyle),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Center(

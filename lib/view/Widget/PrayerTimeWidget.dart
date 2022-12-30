@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:reverpod/helper.dart';
 import 'package:reverpod/provider/provider.dart';
 
 import '../../constant.dart';
@@ -9,9 +10,11 @@ import '../../models/jadwal_sholat.dart';
 import '../../service/network_service.dart';
 
 class PrayerTimeWidget extends ConsumerWidget {
+  const PrayerTimeWidget({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(jadwalProvider);
+    final data = ref.watch(jadwalProvider);
 
     return Container(
         width: double.infinity,
@@ -28,59 +31,60 @@ class PrayerTimeWidget extends ConsumerWidget {
               Text(
                 'Jadwal Shalat',
                 style: kPrimaryFontStyle.copyWith(
-                    fontSize: 14, fontWeight: FontWeight.w500),
+                    fontSize: 13, fontWeight: FontWeight.w300),
               ),
               const Spacer(),
-              Text(
-                DateFormat('EEEEE', 'en_US').format(DateTime.now()).toString(),
-                textAlign: TextAlign.start,
-                style: kPrimaryFontStyle.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black54),
-              ),
-              // Icon(
-              //   Icons.open_in_full,
-              //   size: 20,
-              //   color: kSecondaryColor,
-              // )
+              const Icon(
+                Icons.open_in_new,
+                color: Colors.black87,
+                size: 18,
+              )
+              //   Text(
+              //     formatHari(DateTime.now().toString()),
+              //     textAlign: TextAlign.start,
+              //     style: kPrimaryFontStyle.copyWith(
+              //         fontSize: 12,
+              //         fontWeight: FontWeight.normal,
+              //         color: Colors.black54),
+              //   ),
             ]),
             SizedBox(
-              height: 110,
-              child: _data.when(
-                  data: (post) {
-                    return ListView(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        PrayerTimeCard(time: post.imsak, name: 'Imsak'),
-                        PrayerTimeCard(time: post.subuh, name: 'Subuh'),
-                        PrayerTimeCard(time: post.terbit, name: 'Terbit'),
-                        PrayerTimeCard(time: post.dhuha, name: 'Dhuha'),
-                        PrayerTimeCard(time: post.dzuhur, name: 'Dzuhur'),
-                        PrayerTimeCard(time: post.ashar, name: 'Ashar'),
-                        PrayerTimeCard(time: post.maghrib, name: 'Maghrib'),
-                        PrayerTimeCard(time: post.isya, name: 'Isya'),
-                      ],
-                    );
-                  },
-                  error: (err, s) => Text(err.toString()),
-                  loading: () {
-                    return ListView(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        PrayerTimeCard(time: null, name: 'Imsak'),
-                        PrayerTimeCard(time: null, name: 'Subuh'),
-                        PrayerTimeCard(time: null, name: 'Terbit'),
-                        PrayerTimeCard(time: null, name: 'Dhuha'),
-                        PrayerTimeCard(time: null, name: 'Dzuhur'),
-                        PrayerTimeCard(time: null, name: 'Ashar'),
-                        PrayerTimeCard(time: null, name: 'Maghrib'),
-                        PrayerTimeCard(time: null, name: 'Isya'),
-                      ],
-                    );
-                  }),
+              height: 100,
+              child: data.when(
+                data: (post) {
+                  return ListView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      PrayerTimeCard(time: post.imsak, name: 'Imsak'),
+                      PrayerTimeCard(time: post.subuh, name: 'Subuh'),
+                      PrayerTimeCard(time: post.terbit, name: 'Terbit'),
+                      PrayerTimeCard(time: post.dhuha, name: 'Dhuha'),
+                      PrayerTimeCard(time: post.dzuhur, name: 'Dzuhur'),
+                      PrayerTimeCard(time: post.ashar, name: 'Ashar'),
+                      PrayerTimeCard(time: post.maghrib, name: 'Maghrib'),
+                      PrayerTimeCard(time: post.isya, name: 'Isya'),
+                    ],
+                  );
+                },
+                error: (err, s) => Text(err.toString()),
+                loading: () {
+                  return ListView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: const [
+                      PrayerTimeCard(time: null, name: 'Imsak'),
+                      PrayerTimeCard(time: null, name: 'Subuh'),
+                      PrayerTimeCard(time: null, name: 'Terbit'),
+                      PrayerTimeCard(time: null, name: 'Dhuha'),
+                      PrayerTimeCard(time: null, name: 'Dzuhur'),
+                      PrayerTimeCard(time: null, name: 'Ashar'),
+                      PrayerTimeCard(time: null, name: 'Maghrib'),
+                      PrayerTimeCard(time: null, name: 'Isya'),
+                    ],
+                  );
+                },
+              ),
             )
           ],
         ));
@@ -91,7 +95,7 @@ class PrayerTimeCard extends StatelessWidget {
   final String? time;
   final String? name;
 
-  PrayerTimeCard({Key? key, required this.time, required this.name})
+  const PrayerTimeCard({Key? key, required this.time, required this.name})
       : super(key: key);
 
   // var dt = DateTime.now();
@@ -107,8 +111,8 @@ class PrayerTimeCard extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(bottom: 5),
-            width: 70,
-            height: 80,
+            width: 50,
+            height: 60,
             decoration: const BoxDecoration(
               color: Colors.black54,
               borderRadius: BorderRadius.all(

@@ -52,15 +52,15 @@ class MainPage extends StatelessWidget {
                         height: size.height * .57,
                         width: size.width,
                         child: Stack(
-                          children: [
+                          children: const [
                             DateCardWidget(),
                             AyatOfTheDayCard(),
                           ],
                         ),
                       ),
-                      PrayerTimeWidget(),
+                      const PrayerTimeWidget(),
                       const SizedBox(
-                        height: 50,
+                        height: 20,
                       ),
                       MenuWidget()
                     ],

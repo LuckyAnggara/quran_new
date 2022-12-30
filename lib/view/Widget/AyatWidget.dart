@@ -53,7 +53,7 @@ class AyahWidget extends ConsumerWidget {
                 //Latin
                 setting('latinShow')
                     ? Container(
-                        margin: EdgeInsets.symmetric(vertical: 5),
+                        margin: EdgeInsets.symmetric(vertical: 10),
                         width: double.infinity,
                         child: Text(
                           ayat.tr.toString(),

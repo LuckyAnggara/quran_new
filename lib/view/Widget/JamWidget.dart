@@ -12,7 +12,7 @@ class ClockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       child: StreamBuilder(
         stream: Stream.periodic(const Duration(seconds: 1)),
         builder: (context, snapshot) {
