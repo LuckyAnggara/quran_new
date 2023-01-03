@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:reverpod/constant.dart';
 import 'package:reverpod/models/detail_surat.dart';
-import 'package:reverpod/models/setting.dart';
-import 'package:reverpod/provider/setting_provider.dart';
+import 'package:reverpod/provider/provider.dart';
 
 class AyahWidget extends ConsumerWidget {
   final Ayat ayat;
@@ -39,7 +36,7 @@ class AyahWidget extends ConsumerWidget {
                 //ARAB
                 setting('arabicShow')
                     ? Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         width: double.infinity,
                         child: Text(
                           ayat.ar.toString(),
@@ -53,7 +50,7 @@ class AyahWidget extends ConsumerWidget {
                 //Latin
                 setting('latinShow')
                     ? Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         width: double.infinity,
                         child: Text(
                           ayat.tr.toString(),
@@ -64,10 +61,10 @@ class AyahWidget extends ConsumerWidget {
                               fontWeight: FontWeight.w500),
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
                 //Translate
                 setting('translateShow')
-                    ? Container(
+                    ? SizedBox(
                         width: double.infinity,
                         child: Text(
                           ayat.idn.toString(),
@@ -77,7 +74,7 @@ class AyahWidget extends ConsumerWidget {
                               fontWeight: FontWeight.w500),
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             ),
           ),

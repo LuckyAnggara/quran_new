@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reverpod/constant.dart';
-import 'package:reverpod/models/setting.dart';
-import 'package:reverpod/provider/setting_provider.dart';
+import 'package:reverpod/provider/provider.dart';
 
 class ModalBottomSheet extends StatelessWidget {
   final Widget child;
@@ -16,7 +15,7 @@ class ModalBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Material(
           color: backgroundColor,
           clipBehavior: Clip.antiAlias,

@@ -47,6 +47,7 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   percent_indicator: ^4.2.2
   riverpod: ^2.1.1
+  scrollable_positioned_list: ^0.3.5
   supercharged: ^2.1.1
   syncfusion_flutter_sliders: ^20.4.38
 

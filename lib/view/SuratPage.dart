@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../constant.dart';
@@ -21,7 +20,7 @@ class SuratPage extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: kPrimaryColor,
           title: Text(
@@ -31,31 +30,29 @@ class SuratPage extends ConsumerWidget {
         ),
         backgroundColor: kPrimaryColor,
         body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           child: Column(
             children: [
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
-                ),
-                child: SizedBox(
-                  child: SvgPicture.asset(
-                    'assets/svg/quran.svg',
-                    color: kSecondaryColor,
-                    height: 72,
-                    width: 72,
-                  ),
-                ),
-              ),
+              //   Container(
+              //     width: double.infinity,
+              //     decoration: const BoxDecoration(
+              //       borderRadius: BorderRadius.all(
+              //         Radius.circular(12),
+              //       ),
+              //     ),
+              //     child: SizedBox(
+              //       child: SvgPicture.asset(
+              //         'assets/svg/quran.svg',
+              //         color: kSecondaryColor,
+              //         height: 72,
+              //         width: 72,
+              //       ),
+              //     ),
+              //   ),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 10),
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                    vertical: 12,
                     horizontal: 12,
                   ),
                   decoration: const BoxDecoration(
@@ -230,23 +227,23 @@ class SuratPage extends ConsumerWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (!isPlay) {
-                        ref
-                            .read(nowPlayingProvider.notifier)
-                            .setId(surat.nomor.toString());
-                        ref
-                            .read(nowPlayingProvider.notifier)
-                            .setUrl(surat.audio.toString());
+                      //     if (!isPlay) {
+                      //       ref
+                      //           .read(nowPlayingProvider.notifier)
+                      //           .setId(surat.nomor.toString());
+                      //       ref
+                      //           .read(nowPlayingProvider.notifier)
+                      //           .setUrl(surat.audio.toString());
 
-                        // ref.read(justAudioProvider).when(
-                        //     data: (play) => play.play(),
-                        //     error: (error, t) => print(error.toString()),
-                        //     loading: () => print('loading'));
-                      } else {
-                        ref.read(nowPlayingProvider.notifier).setId("0");
+                      //       // ref.read(justAudioProvider).when(
+                      //       //     data: (play) => play.play(),
+                      //       //     error: (error, t) => print(error.toString()),
+                      //       //     loading: () => print('loading'));
+                      //     } else {
+                      //       ref.read(nowPlayingProvider.notifier).setId("0");
 
-                        ref.read(nowPlayingProvider.notifier).setUrl("");
-                      }
+                      //       ref.read(nowPlayingProvider.notifier).setUrl("");
+                      //     }
                     },
                     child: Icon(
                       isPlay
@@ -315,6 +312,7 @@ class SuratWidget extends StatelessWidget {
           );
         },
         child: InkWell(
+          splashColor: kSecondaryColor,
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 5),
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -385,23 +383,23 @@ class SuratWidget extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (!isPlay) {
-                              ref
-                                  .read(nowPlayingProvider.notifier)
-                                  .setId(surat.nomor.toString());
-                              ref
-                                  .read(nowPlayingProvider.notifier)
-                                  .setUrl(surat.audio.toString());
+                            //     if (!isPlay) {
+                            // ref
+                            //     .read(nowPlayingProvider.notifier)
+                            //     .setId(surat.nomor.toString());
+                            // ref
+                            //     .read(nowPlayingProvider.notifier)
+                            //     .setUrl(surat.audio.toString());
 
-                              // ref.read(justAudioProvider).when(
-                              //     data: (play) => play.play(),
-                              //     error: (error, t) => print(error.toString()),
-                              //     loading: () => print('loading'));
-                            } else {
-                              ref.read(nowPlayingProvider.notifier).setId("0");
+                            // ref.read(justAudioProvider).when(
+                            //     data: (play) => play.play(),
+                            //     error: (error, t) => print(error.toString()),
+                            //     loading: () => print('loading'));
+                            //     } else {
+                            //       ref.read(nowPlayingProvider.notifier).setId("0");
 
-                              ref.read(nowPlayingProvider.notifier).setUrl("");
-                            }
+                            //       ref.read(nowPlayingProvider.notifier).setUrl("");
+                            //     }
                           },
                           child: Icon(
                             isPlay

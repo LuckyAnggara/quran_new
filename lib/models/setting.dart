@@ -33,28 +33,3 @@ class Setting {
     box.put(keyValue, value);
   }
 }
-
-final settingProvider = StateProvider<Setting>((ref) => Setting());
-
-class SettingNotifier extends ChangeNotifier {
-  final setting = Setting();
-
-  void updateKeyBool(String keyValue, value) {
-    setting.setBool(keyValue, value);
-    notifyListeners();
-  }
-
-  void updateKeyString(String keyValue, value) {
-    setting.setString(keyValue, value);
-    notifyListeners();
-  }
-
-  void updateKeyDouble(String keyValue, value) {
-    setting.setDouble(keyValue, value);
-    notifyListeners();
-  }
-}
-
-final settingNotifierProvider = ChangeNotifierProvider<SettingNotifier>((ref) {
-  return SettingNotifier();
-});

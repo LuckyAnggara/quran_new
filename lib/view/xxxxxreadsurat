@@ -8,7 +8,6 @@ import 'package:reverpod/router.dart';
 import 'package:reverpod/view/Widget/AppBar.dart';
 import 'package:reverpod/view/Widget/AyatWidget.dart';
 import 'package:reverpod/view/Widget/ModalBottomSheetSetting.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../constant.dart';
 import '../models/detail_surat.dart';
@@ -22,17 +21,8 @@ class ReadSuratPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _data = ref.watch(bacaProvider(surat.nomor.toString()));
     final sc = ref.watch(scrollControllerProvider);
-
-    final ItemScrollController itemScrollController = ItemScrollController();
-
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          itemScrollController.scrollTo(
-              index: sc.index,
-              duration: Duration(seconds: 2),
-              curve: Curves.easeInOutCubic);
-        }),
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0,
@@ -72,13 +62,25 @@ class ReadSuratPage extends ConsumerWidget {
                               children: const [],
                             ),
                           )
-                        : ScrollablePositionedList.builder(
+                        : CustomScrollView(
+                            shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
-                            itemScrollController: itemScrollController,
-                            itemBuilder: (context, index) => AyahWidget(
-                              ayat: items.ayat![index],
-                            ),
-                            itemCount: items.ayat!.length,
+                            controller: sc.scrollController,
+                            slivers: [
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                  return CardDetailSurah(surat: surat);
+                                }, childCount: 1),
+                              ),
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                  Ayat ayat = items.ayat![index];
+                                  return AyahWidget(ayat: ayat);
+                                }, childCount: items.ayat!.length),
+                              )
+                            ],
                           );
                   },
                   error: (err, stk) {

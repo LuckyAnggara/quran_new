@@ -7,7 +7,7 @@ import 'package:reverpod/models/jadwal_sholat.dart';
 import 'package:reverpod/models/kota.dart';
 import 'package:reverpod/models/now_playing.dart';
 import 'package:reverpod/models/setting.dart';
-import 'package:reverpod/provider/setting_provider.dart';
+import 'package:flutter/material.dart';
 
 import '../models/detail_surat.dart';
 import '../models/surat.dart';
@@ -60,7 +60,7 @@ final jadwalProvider = FutureProvider<Jadwal>((ref) async {
   return ref.read(apiShalatProvider).getJadwal(locationId);
 });
 
-final nowPlayingProvider = ChangeNotifierProvider<NowPlaying>((ref) {
+final nowPlayingProvider = StateProvider<NowPlaying>((ref) {
   return NowPlaying();
 });
 
@@ -69,4 +69,29 @@ final justAudioProvider = FutureProvider<AudioPlayer>((ref) {
   final nowPlaying = ref.watch(nowPlayingProvider);
   audioPlayer.setUrl(nowPlaying.getUrl);
   return audioPlayer;
+});
+
+final settingProvider = StateProvider<Setting>((ref) => Setting());
+
+class SettingNotifier extends ChangeNotifier {
+  final setting = Setting();
+
+  void updateKeyBool(String keyValue, value) {
+    setting.setBool(keyValue, value);
+    notifyListeners();
+  }
+
+  void updateKeyString(String keyValue, value) {
+    setting.setString(keyValue, value);
+    notifyListeners();
+  }
+
+  void updateKeyDouble(String keyValue, value) {
+    setting.setDouble(keyValue, value);
+    notifyListeners();
+  }
+}
+
+final settingNotifierProvider = ChangeNotifierProvider<SettingNotifier>((ref) {
+  return SettingNotifier();
 });
