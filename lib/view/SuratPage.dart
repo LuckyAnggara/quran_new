@@ -33,22 +33,6 @@ class SuratPage extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           child: Column(
             children: [
-              //   Container(
-              //     width: double.infinity,
-              //     decoration: const BoxDecoration(
-              //       borderRadius: BorderRadius.all(
-              //         Radius.circular(12),
-              //       ),
-              //     ),
-              //     child: SizedBox(
-              //       child: SvgPicture.asset(
-              //         'assets/svg/quran.svg',
-              //         color: kSecondaryColor,
-              //         height: 72,
-              //         width: 72,
-              //       ),
-              //     ),
-              //   ),
               Expanded(
                 child: Container(
                   width: double.infinity,

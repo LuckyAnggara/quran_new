@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reverpod/provider/provider.dart';
 import 'package:reverpod/models/surat.dart';
 import 'package:reverpod/provider/read_surat_provider.dart';
@@ -9,36 +11,46 @@ import 'package:reverpod/view/Widget/AppBar.dart';
 import 'package:reverpod/view/Widget/AyatWidget.dart';
 import 'package:reverpod/view/Widget/ModalBottomSheetSetting.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:supercharged/supercharged.dart';
 
 import '../constant.dart';
 import '../models/detail_surat.dart';
 
 class ReadSuratPage extends ConsumerWidget {
-  const ReadSuratPage({Key? key, required this.surat}) : super(key: key);
+  ReadSuratPage({Key? key, required this.surat}) : super(key: key);
 
   final Surat surat;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _data = ref.watch(bacaProvider(surat.nomor.toString()));
-    final sc = ref.watch(scrollControllerProvider);
-
-    final ItemScrollController itemScrollController = ItemScrollController();
+    final ayat = ref.watch(cariAyatProvider);
+    final itemScrollController = ref.watch(itemScrollProvider);
+    final itemPositionController = ref.watch(itemPositionProvider);
 
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          itemScrollController.scrollTo(
-              index: sc.index,
-              duration: Duration(seconds: 2),
-              curve: Curves.easeInOutCubic);
-        }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return ShowCariAyatAlert();
+              },
+            );
+          },
+          backgroundColor: kSecondaryColor,
+          child: const Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+        ),
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: kPrimaryColor,
           title: Text(
-            sc.message,
+            ayat.toString(),
             style: kPrimaryFontStyle,
           ),
           actions: [
@@ -75,6 +87,7 @@ class ReadSuratPage extends ConsumerWidget {
                         : ScrollablePositionedList.builder(
                             physics: const BouncingScrollPhysics(),
                             itemScrollController: itemScrollController,
+                            itemPositionsListener: itemPositionController,
                             itemBuilder: (context, index) => AyahWidget(
                               ayat: items.ayat![index],
                             ),
@@ -232,5 +245,76 @@ class ModalFit extends StatelessWidget {
         ],
       ),
     ));
+  }
+}
+
+class ShowCariAyatAlert extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final itemScrollController = ref.watch(itemScrollProvider);
+
+    final ayat = ref.watch(cariAyatProvider);
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            20.0,
+          ),
+        ),
+      ),
+      contentPadding:
+          const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 5.0, right: 5.0),
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: 60,
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                if (value == 0 || value == "" || value == null) {
+                  ref.read(cariAyatProvider.notifier).state = 1;
+                } else {
+                  ref.read(cariAyatProvider.notifier).state = int.parse(value);
+                }
+              },
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Cari Ayat',
+              ),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: 45,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 5.0,
+            ),
+            child: ElevatedButton(
+              onPressed: () {
+                context.pop();
+                itemScrollController.scrollTo(
+                  index: ayat - 1,
+                  duration: const Duration(seconds: 2),
+                  curve: Curves.easeInOutCubic,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kSecondaryColor,
+                // fixedSize: Size(250, 50),
+              ),
+              child: Text(
+                "Cari",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

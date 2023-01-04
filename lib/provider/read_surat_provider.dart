@@ -1,34 +1,39 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-final scrollControllerProvider =
-    ChangeNotifierProvider.autoDispose<ScrollControllerSurat>((ref) {
-  return ScrollControllerSurat();
+final cariAyatProvider = StateProvider.autoDispose<int>((ref) {
+  return 1;
 });
 
-class ScrollControllerSurat extends ChangeNotifier {
+final itemScrollProvider =
+    StateProvider.autoDispose<ItemScrollController>((ref) {
+  return ItemScrollController();
+});
+
+class AyatPosition extends ChangeNotifier {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-  int index = 4;
-  String message = '';
-  double offset = 0.01;
-  double max = 0.01;
-  double oy = 0.01;
+  final ItemScrollController itemScrollController = ItemScrollController();
 
-  ScrollControllerSurat() {
-    listener();
+  AyatPosition() {
+    init();
   }
 
-  void add() {
-    index + 4;
-    notifyListeners();
-  }
-
-  void listener() {
-    itemPositionsListener.itemPositions.addListener(() {
-      notifyListeners();
-    });
+  final double position = 0;
+  void init() {
+    itemPositionsListener.itemPositions.addListener(() {});
   }
 }
+
+final ItemPositionsListenerProvider =
+    StateProvider.autoDispose<ItemPositionsListener>((ref) {
+  return ItemPositionsListener.create();
+});
+
+final itemPositionProvider =
+    StateProvider.autoDispose<ItemPositionsListener>((ref) {
+  return ItemPositionsListener.create();
+});
