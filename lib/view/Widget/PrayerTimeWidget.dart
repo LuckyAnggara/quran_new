@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:reverpod/helper.dart';
 import 'package:reverpod/provider/provider.dart';
+import 'package:reverpod/provider/read_surat_provider.dart';
 
 import '../../constant.dart';
 import '../../models/jadwal_sholat.dart';
@@ -29,24 +31,21 @@ class PrayerTimeWidget extends ConsumerWidget {
           children: [
             Row(children: [
               Text(
-                'Jadwal Shalat',
+                'Jadwal Shalat Hari Ini',
                 style: kPrimaryFontStyle.copyWith(
                     fontSize: 13, fontWeight: FontWeight.w300),
               ),
               const Spacer(),
-              const Icon(
-                Icons.open_in_new,
-                color: Colors.black87,
-                size: 18,
+              GestureDetector(
+                onTap: () {
+                  context.goNamed('jadwal-sholat');
+                },
+                child: Icon(
+                  Icons.open_in_new,
+                  color: Colors.black54,
+                  size: 18,
+                ),
               )
-              //   Text(
-              //     formatHari(DateTime.now().toString()),
-              //     textAlign: TextAlign.start,
-              //     style: kPrimaryFontStyle.copyWith(
-              //         fontSize: 12,
-              //         fontWeight: FontWeight.normal,
-              //         color: Colors.black54),
-              //   ),
             ]),
             SizedBox(
               height: 100,

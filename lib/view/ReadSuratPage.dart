@@ -16,17 +16,28 @@ import 'package:supercharged/supercharged.dart';
 import '../constant.dart';
 import '../models/detail_surat.dart';
 
-class ReadSuratPage extends ConsumerWidget {
+class ReadSuratPage extends ConsumerStatefulWidget {
   ReadSuratPage({Key? key, required this.surat}) : super(key: key);
-
   final Surat surat;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(bacaProvider(surat.nomor.toString()));
-    final ayat = ref.watch(cariAyatProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _ReadSuratPageState();
+}
+
+class _ReadSuratPageState extends ConsumerState<ReadSuratPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {});
+  }
+
+  void listener() {}
+  @override
+  Widget build(BuildContext context) {
+    final _data = ref.watch(bacaProvider(widget.surat.nomor.toString()));
     final itemScrollController = ref.watch(itemScrollProvider);
-    final itemPositionController = ref.watch(itemPositionProvider);
+    final itemPositionsListener = ref.watch(itemPositionProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -50,7 +61,7 @@ class ReadSuratPage extends ConsumerWidget {
           elevation: 0,
           backgroundColor: kPrimaryColor,
           title: Text(
-            ayat.toString(),
+            "Bismilah",
             style: kPrimaryFontStyle,
           ),
           actions: [
@@ -87,7 +98,7 @@ class ReadSuratPage extends ConsumerWidget {
                         : ScrollablePositionedList.builder(
                             physics: const BouncingScrollPhysics(),
                             itemScrollController: itemScrollController,
-                            itemPositionsListener: itemPositionController,
+                            itemPositionsListener: itemPositionsListener,
                             itemBuilder: (context, index) => AyahWidget(
                               ayat: items.ayat![index],
                             ),
@@ -252,6 +263,7 @@ class ShowCariAyatAlert extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final itemScrollController = ref.watch(itemScrollProvider);
+    final itemPositionsListener = ref.watch(itemPositionProvider);
 
     final ayat = ref.watch(cariAyatProvider);
     return AlertDialog(
@@ -296,13 +308,17 @@ class ShowCariAyatAlert extends ConsumerWidget {
               vertical: 5.0,
             ),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 context.pop();
-                itemScrollController.scrollTo(
+                itemScrollController
+                    .scrollTo(
                   index: ayat - 1,
                   duration: const Duration(seconds: 2),
                   curve: Curves.easeInOutCubic,
-                );
+                )
+                    .then((value) {
+                  print(itemPositionsListener.itemPositions.value);
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kSecondaryColor,

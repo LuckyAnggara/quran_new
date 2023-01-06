@@ -3,6 +3,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+final suratPageControllerProvider = StateProvider.autoDispose<ScrollController>(
+  (ref) => ScrollController(),
+);
+final jadwalSolatControllerProvider =
+    StateProvider.autoDispose<ScrollController>(
+  (ref) => ScrollController(),
+);
+
 final cariAyatProvider = StateProvider.autoDispose<int>((ref) {
   return 1;
 });
@@ -23,17 +31,20 @@ class AyatPosition extends ChangeNotifier {
   }
 
   final double position = 0;
+
   void init() {
-    itemPositionsListener.itemPositions.addListener(() {});
+    itemPositionsListener.itemPositions.addListener(() {
+      debugPrint(itemScrollController.toString());
+      notifyListeners();
+    });
   }
 }
-
-final ItemPositionsListenerProvider =
-    StateProvider.autoDispose<ItemPositionsListener>((ref) {
-  return ItemPositionsListener.create();
-});
 
 final itemPositionProvider =
     StateProvider.autoDispose<ItemPositionsListener>((ref) {
   return ItemPositionsListener.create();
+});
+
+final ayatPositionProvider = ChangeNotifierProvider<AyatPosition>((ref) {
+  return AyatPosition();
 });

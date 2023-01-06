@@ -1,21 +1,24 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:reverpod/provider/read_surat_provider.dart';
 
 import '../constant.dart';
 import '../provider/provider.dart';
 import '../models/surat.dart';
 
 class SuratPage extends ConsumerWidget {
-  const SuratPage({Key? key}) : super(key: key);
+  SuratPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(suratProvider);
     final play = ref.watch(nowPlayingProvider);
+    final scrollController = ref.watch(suratPageControllerProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -71,29 +74,50 @@ class SuratPage extends ConsumerWidget {
                                     shrinkWrap: true,
                                     physics: const BouncingScrollPhysics(),
                                     slivers: [
-                                      SliverList(
-                                        delegate: SliverChildBuilderDelegate(
-                                            (context, index) {
+                                      LiveSliverList(
+                                        controller: scrollController,
+                                        itemCount: items.length,
+                                        showItemInterval:
+                                            Duration(milliseconds: 100),
+                                        showItemDuration:
+                                            Duration(milliseconds: 200),
+                                        itemBuilder:
+                                            (context, index, animation) {
                                           Surat surat = items[index];
-                                          if (play.id ==
-                                              surat.nomor.toString()) {
-                                            return SuratWidget(
-                                              surat: surat,
-                                              isPlay: true,
-                                              context: context,
-                                              ref: ref,
-                                            );
-                                            //   return listSurat(
-                                            //       surat, true, context, ref);
-                                          }
-                                          return SuratWidget(
-                                            surat: surat,
-                                            isPlay: false,
-                                            context: context,
-                                            ref: ref,
-                                          );
-                                        }, childCount: items.length),
-                                      )
+
+                                          return FadeTransition(
+                                              opacity: animation,
+                                              child: SlideTransition(
+                                                position: Tween<Offset>(
+                                                  begin: Offset(0, 0.3),
+                                                  end: Offset.zero,
+                                                ).animate(animation),
+                                                child: SuratWidget(
+                                                  surat: surat,
+                                                  isPlay: play.id ==
+                                                          surat.nomor.toString()
+                                                      ? true
+                                                      : false,
+                                                  context: context,
+                                                  ref: ref,
+                                                ),
+                                              ));
+                                        },
+                                      ),
+                                      //   SliverList(
+                                      //     delegate: SliverChildBuilderDelegate(
+                                      //         (context, index) {
+                                      //       return SuratWidget(
+                                      //         surat: surat,
+                                      //         isPlay: play.id ==
+                                      //                 surat.nomor.toString()
+                                      //             ? true
+                                      //             : false,
+                                      //         context: context,
+                                      //         ref: ref,
+                                      //       );
+                                      //     }, childCount: items.length),
+                                      //   )
                                     ],
                                   );
                           },
@@ -366,25 +390,7 @@ class SuratWidget extends StatelessWidget {
                           width: 20,
                         ),
                         GestureDetector(
-                          onTap: () {
-                            //     if (!isPlay) {
-                            // ref
-                            //     .read(nowPlayingProvider.notifier)
-                            //     .setId(surat.nomor.toString());
-                            // ref
-                            //     .read(nowPlayingProvider.notifier)
-                            //     .setUrl(surat.audio.toString());
-
-                            // ref.read(justAudioProvider).when(
-                            //     data: (play) => play.play(),
-                            //     error: (error, t) => print(error.toString()),
-                            //     loading: () => print('loading'));
-                            //     } else {
-                            //       ref.read(nowPlayingProvider.notifier).setId("0");
-
-                            //       ref.read(nowPlayingProvider.notifier).setUrl("");
-                            //     }
-                          },
+                          onTap: () {},
                           child: Icon(
                             isPlay
                                 ? Icons.pause_circle_filled_outlined
@@ -405,26 +411,26 @@ class SuratWidget extends StatelessWidget {
                     ))
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                LinearPercentIndicator(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  curve: Curves.bounceIn,
-                  progressColor: kSecondaryColor,
-                  backgroundColor: Colors.grey,
-                  barRadius: Radius.circular(15.0),
-                  animation: true,
-                  lineHeight: 10.0,
-                  animationDuration: 100,
-                  percent: .2,
-                  center: Text(
-                    "20%",
-                    style: kPrimaryFontStyle.copyWith(
-                      fontSize: 8,
-                    ),
-                  ),
-                ),
+                //     const SizedBox(
+                //       height: 10,
+                //     ),
+                //     LinearPercentIndicator(
+                //       padding: const EdgeInsets.symmetric(horizontal: 0),
+                //       curve: Curves.bounceIn,
+                //       progressColor: kSecondaryColor,
+                //       backgroundColor: Colors.grey,
+                //       barRadius: Radius.circular(15.0),
+                //       animation: true,
+                //       lineHeight: 10.0,
+                //       animationDuration: 100,
+                //       percent: .2,
+                //       center: Text(
+                //         "20%",
+                //         style: kPrimaryFontStyle.copyWith(
+                //           fontSize: 8,
+                //         ),
+                //       ),
+                //     ),
               ],
             ),
           ),

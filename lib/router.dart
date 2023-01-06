@@ -23,7 +23,7 @@ final GoRouter router = GoRouter(routes: <RouteBase>[
         pageBuilder: (context, state) {
           return CustomTransitionPage(
             key: state.pageKey,
-            child: const SuratPage(),
+            child: SuratPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
@@ -111,6 +111,7 @@ final GoRouter router = GoRouter(routes: <RouteBase>[
         },
       ),
       GoRoute(
+        name: 'jadwal-sholat',
         path: 'jadwal',
         pageBuilder: (context, state) {
           return CustomTransitionPage(
