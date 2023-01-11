@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_file.dart';
-import 'package:intl/intl.dart';
 import 'package:reverpod/helper.dart';
 
 import '../../constant.dart';
@@ -48,7 +46,9 @@ class DateCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const ClockWidget(
+                ClockWidget(
+                  format: "hh:mm:ss",
+                  textColor: Colors.white,
                   size: 36,
                 ),
                 const SizedBox(

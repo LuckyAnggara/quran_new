@@ -2,8 +2,13 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:reverpod/constant.dart';
 import 'package:reverpod/provider/read_surat_provider.dart';
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:reverpod/view/Widget/JamWidget.dart';
+import 'package:reverpod/view/Widget/JamWidgetAgo.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../provider/provider.dart';
 
@@ -48,28 +53,26 @@ class JadwalSolat extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: data.when(
-                          data: (items) {
-                            return CustomScrollView(
-                              shrinkWrap: true,
+                          data: (post) {
+                            return ListView(
                               physics: const BouncingScrollPhysics(),
-                              slivers: [
-                                LiveSliverList(
-                                  controller: scrollController,
-                                  itemCount: 7,
-                                  showItemInterval: Duration(milliseconds: 100),
-                                  showItemDuration: Duration(milliseconds: 200),
-                                  itemBuilder: (context, index, animation) {
-                                    return FadeTransition(
-                                        opacity: animation,
-                                        child: SlideTransition(
-                                          position: Tween<Offset>(
-                                            begin: Offset(0, 0.3),
-                                            end: Offset.zero,
-                                          ).animate(animation),
-                                          child: JadwalSolatWidget(),
-                                        ));
-                                  },
-                                ),
+                              children: [
+                                JadwalSolatWidget(
+                                    time: post.imsak, name: 'Imsak'),
+                                JadwalSolatWidget(
+                                    time: post.subuh, name: 'Subuh'),
+                                JadwalSolatWidget(
+                                    time: post.terbit, name: 'Terbit'),
+                                JadwalSolatWidget(
+                                    time: post.dhuha, name: 'Dhuha'),
+                                JadwalSolatWidget(
+                                    time: post.dzuhur, name: 'Dzuhur'),
+                                JadwalSolatWidget(
+                                    time: post.ashar, name: 'Ashar'),
+                                JadwalSolatWidget(
+                                    time: post.maghrib, name: 'Maghrib'),
+                                JadwalSolatWidget(
+                                    time: post.terbit, name: 'Isya'),
                               ],
                             );
                           },
@@ -111,9 +114,16 @@ class JadwalSolat extends ConsumerWidget {
   }
 }
 
-class JadwalSolatWidget extends StatelessWidget {
+class JadwalSolatWidget extends ConsumerWidget {
+  final String? time;
+  final String? name;
+
+  const JadwalSolatWidget({Key? key, required this.time, required this.name})
+      : super(key: key);
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -144,100 +154,88 @@ class JadwalSolatWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Row(
-                      children: [
-                        Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "aaa",
-                                  style: kPrimaryFontStyle.copyWith(
-                                    fontSize: 11,
-                                  ),
-                                ))
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "aaa",
-                                style: kPrimaryFontStyle.copyWith(fontSize: 12),
-                              ),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Text(
-                                "aaa",
-                                style: kPrimaryFontStyle.copyWith(
-                                    fontSize: 9,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Ongoing',
+                      style: kPrimaryFontStyle.copyWith(
+                        fontSize: 9,
+                      ),
                     ),
                     const Spacer(),
-                    SizedBox(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "aaa",
-                          style: kArabicFontAmiri.copyWith(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Icon(
-                            Icons.download_outlined,
-                            color: kSecondaryColor,
-                            size: 26,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          Icons.download_outlined,
-                          color: kSecondaryColor,
-                          size: 26,
-                        ),
-                      ],
-                    ))
+                    Transform.scale(
+                      scale: 0.75,
+                      child: Switch.adaptive(
+                        activeColor: kSecondaryColor,
+                        value: ref.watch(alarmSholatProvider),
+                        onChanged: (val) {
+                          ref.read(alarmSholatProvider.notifier).state = val;
+                        },
+                      ),
+                    ),
+                    //   AnimatedToggleSwitch<bool>.dual(
+                    //     current: alarmSholat,
+                    //     first: false,
+                    //     second: true,
+                    //     dif: 0.1,
+                    //     borderColor: Colors.transparent,
+                    //     borderWidth: 0.5,
+                    //     height: 10,
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Colors.black26.withOpacity(0.2),
+                    //         spreadRadius: 1,
+                    //         blurRadius: 2,
+                    //         offset: Offset(0, 1.5),
+                    //       ),
+                    //     ],
+                    //     onChanged: (b) {
+                    //       ref.read(alarmSholatProvider.notifier).state = b;
+                    //     },
+                    //     colorBuilder: (b) =>
+                    //         b ? kSecondaryColor : kSecondaryColor,
+                    //     textBuilder: (value) => value
+                    //         ? Center(
+                    //             child: Text(
+                    //               'On',
+                    //               style: kPrimaryFontStyle.copyWith(
+                    //                 fontSize: 8,
+                    //               ),
+                    //             ),
+                    //           )
+                    //         : Center(
+                    //             child: Text(
+                    //               'Off',
+                    //               style: kPrimaryFontStyle.copyWith(
+                    //                 fontSize: 8,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //   ),
                   ],
                 ),
-                //     const SizedBox(
-                //       height: 10,
-                //     ),
-                //     LinearPercentIndicator(
-                //       padding: const EdgeInsets.symmetric(horizontal: 0),
-                //       curve: Curves.bounceIn,
-                //       progressColor: kSecondaryColor,
-                //       backgroundColor: Colors.grey,
-                //       barRadius: Radius.circular(15.0),
-                //       animation: true,
-                //       lineHeight: 10.0,
-                //       animationDuration: 100,
-                //       percent: .2,
-                //       center: Text(
-                //         "20%",
-                //         style: kPrimaryFontStyle.copyWith(
-                //           fontSize: 8,
-                //         ),
-                //       ),
-                //     ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      child: Text(
+                        name!,
+                        style: kPrimaryFontStyle.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    JamWidgetAgo(
+                      time: DateFormat('yyyy-MM-dd hh:mm')
+                          .parse('${formattedDate} ${time!}'),
+                      format: "hh:mm",
+                      size: 14.0,
+                      textColor: Colors.black,
+                    )
+                  ],
+                ),
               ],
             ),
           ),

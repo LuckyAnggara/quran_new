@@ -95,3 +95,7 @@ class SettingNotifier extends ChangeNotifier {
 final settingNotifierProvider = ChangeNotifierProvider<SettingNotifier>((ref) {
   return SettingNotifier();
 });
+
+final alarmSholatProvider = StateProvider<bool>((ref) {
+  return false;
+});

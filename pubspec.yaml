@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_toggle_switch: ^0.6.1
   auto_animated: ^3.1.0
   auto_size_text: ^3.0.0
   cupertino_icons: ^1.0.2
@@ -51,6 +52,7 @@ dependencies:
   scrollable_positioned_list: ^0.3.5
   supercharged: ^2.1.1
   syncfusion_flutter_sliders: ^20.4.38
+  timeago: ^3.2.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0

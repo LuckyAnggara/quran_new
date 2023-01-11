@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reverpod/router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
+  timeago.setLocaleMessages('id', timeago.IdMessages());
+
   await Hive.initFlutter();
   await Hive.openBox('setting');
   runApp(

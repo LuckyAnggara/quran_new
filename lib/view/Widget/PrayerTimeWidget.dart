@@ -40,7 +40,7 @@ class PrayerTimeWidget extends ConsumerWidget {
                 onTap: () {
                   context.goNamed('jadwal-sholat');
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.open_in_new,
                   color: Colors.black54,
                   size: 18,
