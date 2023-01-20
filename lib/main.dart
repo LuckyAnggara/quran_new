@@ -12,8 +12,8 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('setting');
   runApp(
-    ProviderScope(
-      child: const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
