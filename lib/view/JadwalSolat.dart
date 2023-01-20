@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:reverpod/constant.dart';
+import 'package:reverpod/models/jadwal_sholat.dart';
+import 'package:reverpod/provider/jadwal_solat_provider.dart';
 import 'package:reverpod/provider/read_surat_provider.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:reverpod/view/Widget/JamWidget.dart';
@@ -13,12 +15,14 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../provider/provider.dart';
 
 class JadwalSolat extends ConsumerWidget {
-  const JadwalSolat({Key? key}) : super(key: key);
+  JadwalSolat({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(jadwalProvider);
     final scrollController = ref.watch(jadwalSolatControllerProvider);
+
+    final solatProvider = ref.watch(jadwalSolatListProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -52,54 +56,18 @@ class JadwalSolat extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: data.when(
-                          data: (post) {
-                            return ListView(
-                              physics: const BouncingScrollPhysics(),
-                              children: [
-                                JadwalSolatWidget(
-                                    time: post.imsak, name: 'Imsak'),
-                                JadwalSolatWidget(
-                                    time: post.subuh, name: 'Subuh'),
-                                JadwalSolatWidget(
-                                    time: post.terbit, name: 'Terbit'),
-                                JadwalSolatWidget(
-                                    time: post.dhuha, name: 'Dhuha'),
-                                JadwalSolatWidget(
-                                    time: post.dzuhur, name: 'Dzuhur'),
-                                JadwalSolatWidget(
-                                    time: post.ashar, name: 'Ashar'),
-                                JadwalSolatWidget(
-                                    time: post.maghrib, name: 'Maghrib'),
-                                JadwalSolatWidget(
-                                    time: post.terbit, name: 'Isya'),
-                              ],
-                            );
-                          },
-                          error: (err, stk) {
-                            return SliverToBoxAdapter(
-                              child: Center(
-                                child: Column(
-                                  children: const [
-                                    Icon(Icons.info),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text(
-                                      "Ada masalah",
-                                      style: TextStyle(color: Colors.black),
-                                    )
-                                  ],
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          children: solatProvider
+                              .map(
+                                (e) => JadwalSolatWidget(
+                                  index: e.id,
+                                  time: e.time,
+                                  name: e.name,
+                                  isAlarm: e.isAlarm,
                                 ),
-                              ),
-                            );
-                          },
-                          loading: () => Center(
-                            child: SpinKitWave(
-                              color: kSecondaryColor,
-                              size: 24,
-                            ),
-                          ),
+                              )
+                              .toList(),
                         ),
                       )
                     ],
@@ -117,8 +85,15 @@ class JadwalSolat extends ConsumerWidget {
 class JadwalSolatWidget extends ConsumerWidget {
   final String? time;
   final String? name;
+  bool isAlarm;
+  int index;
 
-  const JadwalSolatWidget({Key? key, required this.time, required this.name})
+  JadwalSolatWidget(
+      {Key? key,
+      required this.index,
+      required this.time,
+      required this.name,
+      required this.isAlarm})
       : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -165,9 +140,11 @@ class JadwalSolatWidget extends ConsumerWidget {
                       scale: 0.75,
                       child: Switch.adaptive(
                         activeColor: kSecondaryColor,
-                        value: ref.watch(alarmSholatProvider),
+                        value: isAlarm,
                         onChanged: (val) {
-                          ref.read(alarmSholatProvider.notifier).state = val;
+                          ref
+                              .read(jadwalSolatListProvider.notifier)
+                              .toggleAlarm(index);
                         },
                       ),
                     ),

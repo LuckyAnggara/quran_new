@@ -1,3 +1,5 @@
+import 'package:riverpod/riverpod.dart';
+
 class JadwalSholat {
   String? id;
   String? lokasi;
@@ -109,5 +111,61 @@ class Jadwal {
     data['isya'] = this.isya;
     data['date'] = this.date;
     return data;
+  }
+}
+
+class JadwalSholatDetail {
+  final String name;
+  final String time;
+  final int id;
+  bool isDone;
+  bool isAlarm;
+  JadwalSholatDetail(
+      {required this.id,
+      required this.name,
+      required this.time,
+      this.isDone = false,
+      this.isAlarm = false});
+}
+
+class JadwalSolatList extends StateNotifier<List<JadwalSholatDetail>> {
+  JadwalSolatList([List<JadwalSholatDetail>? initialJadwalSolatList])
+      : super(initialJadwalSolatList ?? []);
+
+  void add(int id, String name, String time) {
+    state = [
+      ...state,
+      JadwalSholatDetail(id: id, name: name, time: time),
+    ];
+  }
+
+  void toggleAlarm(int id) {
+    state = [
+      for (final jadwal in state)
+        if (jadwal.id == id)
+          JadwalSholatDetail(
+            id: jadwal.id,
+            isAlarm: !jadwal.isAlarm,
+            name: jadwal.name,
+            time: jadwal.time,
+          )
+        else
+          jadwal,
+    ];
+  }
+
+  void toggleDone(String id) {
+    state = [
+      for (final jadwal in state)
+        if (jadwal.id == id)
+          JadwalSholatDetail(
+            id: jadwal.id,
+            isDone: !jadwal.isDone,
+            name: jadwal.name,
+            time: jadwal.time,
+          )
+        else
+          jadwal,
+    ];
   }
 }
